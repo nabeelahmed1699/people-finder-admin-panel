@@ -1,13 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import Layout from 'src/layout/index';
+
 // Pages
 import Dashboard from 'src/pages/Dashboard';
-import Fees from 'src/pages/Fees';
-import Attendence from 'src/pages/Attendence';
-import Layout from 'src/layout/index';
 import NotFoundPage from 'src/pages/404';
 import Login from 'src/pages/Login';
+import FoundedPeople from 'src/pages/FoundedPeople';
+import MissingPeople from 'src/pages/MissingPeople';
 
 const RouterComponent = () => {
 	return (
@@ -15,8 +16,8 @@ const RouterComponent = () => {
 			<Routes>
 				<Route element={<Layout />}>
 					<Route path='/' element={<Dashboard />} />
-					<Route path='/fees' element={<Fees />} />
-					<Route path='/attendance' element={<Attendence />} />
+					<Route path='/founded-people' element={<FoundedPeople />} />
+					<Route path='/missing-people' element={<MissingPeople />} />
 				</Route>
 				<Route path='/login' element={<Login />} />
 				<Route path='*' element={<NotFoundPage />} />

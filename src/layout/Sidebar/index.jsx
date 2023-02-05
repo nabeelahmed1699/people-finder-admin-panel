@@ -12,15 +12,14 @@ import { Divider, IconButton, Stack } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 // ** custom imports
-import { Link, NavLink } from 'react-router-dom';
+import {  NavLink } from 'react-router-dom';
 import { navlinks } from 'src/navigation';
-import { useTranslation } from 'react-i18next';
 
 // Constants
 const drawerWidth = 240;
 
 function Sidebar({ openDrawer, closeDrawer, drawerOpener, smallScreens }) {
-	const { t } = useTranslation();
+
 
 	return (
 		<Drawer
@@ -84,10 +83,10 @@ function Sidebar({ openDrawer, closeDrawer, drawerOpener, smallScreens }) {
 										{link.icon(isActive)}
 										<Typography
 											color={isActive ? 'dark.main':'neutral.50'}
-											sx={{ ml: 2, transition: 'margin-left .45s ease' }}
+											sx={{ ml: 2, transition: 'margin-left .45s ease',textTransform:'capitalize' }}
 											className='sidebar-text'
 										>
-											{t(link.label)}
+											{link.label}
 										</Typography>
 									</Stack>
 								</Box>

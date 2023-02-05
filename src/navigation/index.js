@@ -13,13 +13,13 @@ export const navlinks = [
 		route: '/',
 	},
 	{
-		label: 'fees',
+		label: 'missing people',
 		icon:(isActive)=> <ReceiptIcon sx={{ color: isActive ? activeColor : nonActive }}  />,
-		route: '/fees',
+		route: '/missing-people',
 	},
 	{
-		label: 'attendence',
+		label: 'founded people',
 		icon:(isActive)=> <PunchClockIcon sx={{ color: isActive ? activeColor : nonActive }}  />,
-		route: '/attendance',
+		route: '/founded-people',
 	},
 ];
