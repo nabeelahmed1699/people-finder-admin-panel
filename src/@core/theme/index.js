@@ -12,13 +12,7 @@ export const theme = createTheme({
 	},
 	components: {
 		MuiButton: {
-			defaultProps: {
-				disableElevation: true,
-			},
 			styleOverrides: {
-				root: {
-					textTransform: 'none',
-				},
 				sizeSmall: {
 					padding: '6px 16px',
 				},
@@ -39,11 +33,7 @@ export const theme = createTheme({
 				},
 			},
 		},
-		MuiButtonBase: {
-			defaultProps: {
-				disableRipple: true,
-			},
-		},
+
 		MuiCardContent: {
 			styleOverrides: {
 				root: {
@@ -164,10 +154,10 @@ export const theme = createTheme({
 			contrastText: '#FFFFFF',
 		},
 		primary: {
-			main: '#C46B39',
-			light: '#C9835B',
-			dark: '#51270F',
-			contrastText: '#FFFFFF',
+			main: '#CAC822',
+			light: '#F1EF2D',
+			dark: '#D0CE07',
+			contrastText: '#000000',
 		},
 		success: {
 			main: '#14B8A6',
