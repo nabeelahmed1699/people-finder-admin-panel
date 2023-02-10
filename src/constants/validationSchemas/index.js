@@ -28,3 +28,9 @@ export const organizationRegisterSchema = yup.object().shape({
 		.matches(phoneRegExp, 'Phone number is not valid')
 		.required('Phone number is a required field'),
 });
+
+
+export const loginSchema = yup.object().shape({
+	email: yup.string().email().required(),
+	password: yup.string().min(4).max(20).required(),
+});
