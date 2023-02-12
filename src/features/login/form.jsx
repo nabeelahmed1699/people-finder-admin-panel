@@ -30,8 +30,8 @@ import { useAuth } from 'src/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 
 const defaultValues = {
-	password: 'habib@',
-	email: 'habib@gmail.com',
+	password: 'abc',
+	email: 'nabeel1699@gmail.com',
 };
 
 const LoginForm = () => {
@@ -55,15 +55,15 @@ const LoginForm = () => {
 		const { email, password } = data;
 		auth.login({ email, password }, () => {
 			toast.error('Email or Password is invalid');
-			// setError('password', {
-			// 	type: 'manual',
-			// 	message: 'Email or Password is invalid',
-			// });
+			setError('password', {
+				type: 'manual',
+				message: 'Email or Password is invalid',
+			});
 		});
 	};
 
 	return (
-		<Card sx={{ height: '100vh', borderRadius: '0' }}>
+		<Card sx={{ borderRadius: '0' }}>
 			<CardContent sx={{ height: '100%' }}>
 				<Stack
 					direction='row'
@@ -124,8 +124,7 @@ const LoginForm = () => {
 								/>
 								{errors.email && (
 									<FormHelperText sx={{ color: 'error.main' }}>
-										{/* {errors.email.message} */}
-										this field is mandatory!
+										{errors.email.message}
 									</FormHelperText>
 								)}
 							</FormControl>
@@ -165,8 +164,7 @@ const LoginForm = () => {
 								/>
 								{errors.password && (
 									<FormHelperText sx={{ color: 'error.main' }} id=''>
-										{/* {errors.password.message} */}
-										this field is mandatory!
+										{errors.password.message}
 									</FormHelperText>
 								)}
 							</FormControl>

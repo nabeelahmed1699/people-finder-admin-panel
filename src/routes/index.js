@@ -10,16 +10,19 @@ import Login from 'src/pages/Login';
 import FoundedPeople from 'src/pages/FoundedPeople';
 import MissingPeople from 'src/pages/MissingPeople';
 import Organizations from 'src/pages/Organizations';
+import PrivateRoutes from './PrivateRoutes';
 
 const RouterComponent = () => {
 	return (
 		<>
 			<Routes>
 				<Route element={<Layout />}>
+					{/* <Route element={<PrivateRoutes/>}> */}
 					<Route path='/' element={<Dashboard />} />
 					<Route path='/founded-people' element={<FoundedPeople />} />
 					<Route path='/missing-people' element={<MissingPeople />} />
 					<Route path='/organizations' element={<Organizations />} />
+					{/* </Route> */}
 				</Route>
 				<Route path='/login' element={<Login />} />
 				<Route path='*' element={<NotFoundPage />} />

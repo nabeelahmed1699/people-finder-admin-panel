@@ -32,5 +32,5 @@ export const organizationRegisterSchema = yup.object().shape({
 
 export const loginSchema = yup.object().shape({
 	email: yup.string().email().required(),
-	password: yup.string().min(4).max(20).required(),
+	password: yup.string().min(3).max(20).required(),
 });

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 
 // ** MUI IMPORTS
 import Stack from '@mui/material/Stack';
@@ -11,13 +13,36 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Posts from 'src/features/organizations/posts';
 import CustomModal from 'src/components/modal';
 import RegisterationForm from 'src/features/organizations/registerationForm';
+import {
+	GET_ORGANIZATIONS_API_HANDLER,
+	REGISTER_ORGANIZATIONS_API_HANDLER,
+} from 'src/redux/actions/organizationsAction/actions';
 
 const Organizations = () => {
-	const [registerationModal, setRegisterationModal] = useState();
+	const dispatch = useDispatch();
+	const [registerationModal, setRegisterationModal] = useState(false);
+	const [organizations, setOrganizations] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	const openRegisteration = () => setRegisterationModal(true);
 	const closeRegisteration = () => setRegisterationModal(false);
 
+	const registerOrganization = async (data) => {
+		const response = await dispatch(REGISTER_ORGANIZATIONS_API_HANDLER(data));
+		console.log("resws",response)
+		if (response.status >= 200 && response.status <= 299) {
+			closeRegisteration()
+			toast.success('organization registered successfully!');
+			getOrganizations()
+		}
+	};
+
+	const getOrganizations = async () => {
+		setLoading(true);
+		const Data = await dispatch(GET_ORGANIZATIONS_API_HANDLER());
+		setOrganizations(Data);
+		setLoading(false);
+	};
 	return (
 		<Stack>
 			<Button
@@ -28,14 +53,18 @@ const Organizations = () => {
 			>
 				Add new organization
 			</Button>
-			<Posts />
+			<Posts
+				organizations={organizations}
+				getOrganizations={getOrganizations}
+				loading={loading}
+			/>
 			<CustomModal
 				title='Add a new organization'
 				subtitle='fill the fields below to register a new organization in your database'
 				open={registerationModal}
 				onClose={closeRegisteration}
 			>
-				<RegisterationForm />
+				<RegisterationForm registerOrganization={registerOrganization} />
 			</CustomModal>
 		</Stack>
 	);

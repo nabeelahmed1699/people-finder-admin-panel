@@ -1,6 +1,8 @@
+import {BASE_URL} from "src/constants/configs/index"
+
 export const authConfig = {
 	meEndpoint: '/auth/me',
-	loginEndpoint: '/jwt/login',
+	loginEndpoint: `${BASE_URL}/auth`,
 	registerEndpoint: '/jwt/register',
-	storageTokenKeyName: 'accessToken',
+	storageTokenKeyName: 'access_token',
 };

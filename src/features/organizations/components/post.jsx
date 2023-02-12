@@ -18,15 +18,21 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const ITEM_HEIGHT = 30;
 
-const Post = ({ src, alt, profilePic, name }) => {
+const Post = ({ handleDelete, name,BIO,_id }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
+
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
+	const deleteItem = () => {
+		handleClose()
+		handleDelete(_id)
+	}
 	return (
 		<>
 			<Stack>
@@ -45,15 +51,15 @@ const Post = ({ src, alt, profilePic, name }) => {
 					/>
 				</Box>
 				<Stack direction='row' sx={{ mt: 1 }}>
-					{!!profilePic ? (
-						<Avatar src={profilePic} alt={name} />
+					{!!false ? (
+						<Avatar src={'sdsds'} alt={name} />
 					) : (
-						<Avatar>{'nabeel'.charAt(0).toUpperCase()}</Avatar>
+						<Avatar>{name.charAt(0).toUpperCase()}</Avatar>
 					)}
-					<Stack sx={{ ml: 1 }}>
-						<Stack direction='row' justifyContent='space-between'>
-							<Typography fontWeight={700}>Edhi</Typography>
-							<>
+					<Stack sx={{ ml: 1,flexGrow:2 }}>
+						<Stack direction='row' justifyContent='space-between' sx={{width:'100%'}}>
+							<Typography fontWeight={700}>{name}</Typography>
+							
 								<IconButton
 									aria-label='more'
 									id='long-button'
@@ -64,10 +70,10 @@ const Post = ({ src, alt, profilePic, name }) => {
 								>
 									<MoreVertIcon />
 								</IconButton>
-							</>
+							
 						</Stack>
 						<Typography paragraph variant='caption'>
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+							{BIO}
 						</Typography>
 					</Stack>
 				</Stack>
@@ -93,7 +99,7 @@ const Post = ({ src, alt, profilePic, name }) => {
 					</ListItemIcon>
 					<ListItemText>Edit</ListItemText>
 				</MenuItem>
-				<MenuItem>
+				<MenuItem onClick={deleteItem}>
 					<ListItemIcon>
 						<DeleteOutlineIcon fontSize='small' />
 					</ListItemIcon>

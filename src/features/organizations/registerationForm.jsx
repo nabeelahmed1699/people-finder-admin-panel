@@ -15,19 +15,21 @@ import { organizationRegisterSchema } from 'src/constants/validationSchemas';
 import CustomPhoneInput from 'src/components/phoneInput/index';
 
 const defaultValues = {
-	name: '',
-	branchName: '',
-	branchCode: '',
-	city: '',
-	state: '',
-	street: '',
-	email: '',
+	name: 'Sahara Foundation',
+	branchName: 'Mughal pura',
+	branchCode: '287FE2D',
+	city: 'Lahore',
+	country: 'Pakistan',
+	state: 'Punjab',
+	street: 'gulon wala chowk',
+	email: 'sahara@pk.com',
+	phoneNo: '+923244902616',
+	BIO:"We have many missing child, in hope one day some body came and take them to their house."
 };
 
-const RegisterationForm = () => {
-	const onSubmit = (data) => {
-		console.log(data);
-	};
+const RegisterationForm = ({registerOrganization}) => {
+	
+
 	const {
 		control,
 		// setError,
@@ -40,7 +42,7 @@ const RegisterationForm = () => {
 	});
 
 	return (
-		<form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+		<form noValidate autoComplete='off' onSubmit={handleSubmit(registerOrganization)}>
 			<Grid container spacing={1}>
 				<Grid item xs={12} sm={6}>
 					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
@@ -247,6 +249,33 @@ const RegisterationForm = () => {
 						{errors.street && (
 							<FormHelperText sx={{ color: 'error.main' }}>
 								{errors.street.message}
+							</FormHelperText>
+						)}
+					</FormControl>
+				</Grid>
+				<Grid item xs={12}>
+					<FormControl fullWidth sx={{ mb: 1 }}>
+						<Controller
+							name='BIO'
+							control={control}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<TextField
+									autoFocus
+									multiline
+									minRows={4}
+									size='small'
+									label='Bio'
+									placeholder='Bio'
+									value={value}
+									onBlur={onBlur}
+									onChange={onChange}
+									error={Boolean(errors.BIO)}
+								/>
+							)}
+						/>
+						{errors.BIO && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.BIO.message}
 							</FormHelperText>
 						)}
 					</FormControl>

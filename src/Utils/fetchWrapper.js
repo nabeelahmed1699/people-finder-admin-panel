@@ -5,6 +5,8 @@
  *   Token stored in Local Storage and return a string of Bearer Token
  * */
 
+import { authConfig } from "src/constants/configs/auth";
+
 /**
  * @function fetchWrapper
  * @param {string} arg1 - REST method | url
@@ -24,9 +26,9 @@ export const fetchWrapper = async (arg1, url, body, additionalOptions) => {
 		method: _method,
 		headers: {
 			Accept: 'application/json',
-			// Authorization: window.localStorage.getItem(
-			// 	authConfig.storageTokenKeyName
-			// ),
+			'x-auth-token': window.localStorage.getItem(
+				authConfig.storageTokenKeyName
+			),
 			'Content-Type': 'application/json',
 		},
 		body: body && JSON.stringify(body), // body can be undefined, that's ok

@@ -1,6 +1,7 @@
 // ** React Imports
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 // ** Axios
 import axios from 'axios';
@@ -11,7 +12,7 @@ import { authConfig } from '../constants/configs/auth';
 // ** Defaults
 const defaultProvider = {
 	user: null,
-	loading: true,
+	loading: false,
 	setUser: () => null,
 	setLoading: () => Boolean,
 	isInitialized: false,
@@ -32,69 +33,55 @@ const AuthProvider = ({ children }) => {
 
 	// ** Hooks
 	const navigate = useNavigate();
-	useEffect(() => {
-		const initAuth = async () => {
-			setIsInitialized(true);
-			const storedToken = window.localStorage.getItem(
-				authConfig.storageTokenKeyName
-			);
-			if (storedToken) {
-				setLoading(true);
-				await axios
-					.get(authConfig.meEndpoint, {
-						headers: {
-							Authorization: storedToken,
-						},
-					})
-					.then(async (response) => {
-						setLoading(false);
-						setUser({ ...response.data.userData });
-					})
-					.catch(() => {
-						localStorage.removeItem('userData');
-						localStorage.removeItem('refreshToken');
-						localStorage.removeItem('accessToken');
-						setUser(null);
-						setLoading(false);
-					});
-			} else {
-				setLoading(false);
-			}
-		};
-		initAuth();
-	}, []);
+	// useEffect(() => {
+	// 	const initAuth = async () => {
+	// 		setIsInitialized(true);
+	// 		const storedToken = window.localStorage.getItem(
+	// 			authConfig.storageTokenKeyName
+	// 		);
+	// 		if (storedToken) {
+	// 			setLoading(true);
+	// 			await axios
+	// 				.get(authConfig.meEndpoint, {
+	// 					headers: {
+	// 						Authorization: storedToken,
+	// 					},
+	// 				})
+	// 				.then(async (response) => {
+	// 					setLoading(false);
+	// 					setUser({ ...response.data.userData });
+	// 				})
+	// 				.catch(() => {
+	// 					localStorage.removeItem('userData');
+	// 					localStorage.removeItem('refreshToken');
+	// 					localStorage.removeItem('accessToken');
+	// 					setUser(null);
+	// 					setLoading(false);
+	// 				});
+	// 		} else {
+	// 			setLoading(false);
+	// 		}
+	// 	};
+	// 	initAuth();
+	// }, []);
 
 	const handleLogin = (params, errorCallback) => {
+		setLoading(true);
 		axios
 			.post(authConfig.loginEndpoint, params)
-			.then(async (res) => {
+			.then((res) => {
+				console.log('USER', res);
 				window.localStorage.setItem(
 					authConfig.storageTokenKeyName,
-					res.data.accessToken
+					res.data['x-auth-token']
 				);
-			})
-			.then(() => {
-				axios
-					.get(authConfig.meEndpoint, {
-						headers: {
-							Authorization: window.localStorage.getItem(
-								authConfig.storageTokenKeyName
-							),
-						},
-					})
-					.then(async (response) => {
-						const returnUrl = navigate.query.returnUrl;
-						setUser({ ...response.data.userData });
-						await window.localStorage.setItem(
-							'userData',
-							JSON.stringify(response.data.userData)
-						);
-						const redirectURL =
-							returnUrl && returnUrl !== '/' ? returnUrl : '/';
-						navigate(redirectURL, { replace: true });
-					});
+				window.localStorage.setItem('userData', res.data);
+				setLoading(false);
+				toast.success('Logged in successfully!');
+				navigate('/');
 			})
 			.catch((err) => {
+				setLoading(false);
 				if (errorCallback) errorCallback(err);
 			});
 	};
