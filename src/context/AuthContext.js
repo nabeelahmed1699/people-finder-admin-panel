@@ -71,17 +71,29 @@ const AuthProvider = ({ children }) => {
 			.post(authConfig.loginEndpoint, params)
 			.then((res) => {
 				console.log('USER', res);
-				window.localStorage.setItem(
-					authConfig.storageTokenKeyName,
-					res.data['x-auth-token']
-				);
-				window.localStorage.setItem('userData', res.data);
-				setLoading(false);
-				toast.success('Logged in successfully!');
-				navigate('/');
+				if (res.status >= 200 && res.status < 299) {
+					setUser(res.data);
+					window.localStorage.setItem(
+						authConfig.storageTokenKeyName,
+						res.data['x-auth-token']
+					);
+					window.localStorage.setItem(
+						authConfig.userData,
+						JSON.stringify(res)
+					);
+					setLoading(false);
+					toast.success('Logged in successfully!')
+					navigate('/', { replace: true });
+				}
 			})
 			.catch((err) => {
 				setLoading(false);
+				if (typeof err.response !== 'undefined') {
+					if (err.response.status === 404) {
+						toast.error('Invalid email or password!');
+					}
+					return;
+				}
 				if (errorCallback) errorCallback(err);
 			});
 	};

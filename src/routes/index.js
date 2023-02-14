@@ -17,12 +17,12 @@ const RouterComponent = () => {
 		<>
 			<Routes>
 				<Route element={<Layout />}>
-					{/* <Route element={<PrivateRoutes/>}> */}
+					<Route element={<PrivateRoutes/>}>
 					<Route path='/' element={<Dashboard />} />
 					<Route path='/founded-people' element={<FoundedPeople />} />
 					<Route path='/missing-people' element={<MissingPeople />} />
 					<Route path='/organizations' element={<Organizations />} />
-					{/* </Route> */}
+					</Route>
 				</Route>
 				<Route path='/login' element={<Login />} />
 				<Route path='*' element={<NotFoundPage />} />
