@@ -3,12 +3,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // ** MUI IMPORTS
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
+
+
+
 
 // custom imports
 import { organizationRegisterSchema } from 'src/constants/validationSchemas';
@@ -24,12 +26,10 @@ const defaultValues = {
 	street: 'gulon wala chowk',
 	email: 'sahara@pk.com',
 	phoneNo: '+923244902616',
-	BIO:"We have many missing child, in hope one day some body came and take them to their house."
+	BIO: 'We have many missing child, in hope one day some body came and take them to their house.',
 };
 
-const RegisterationForm = ({registerOrganization}) => {
-	
-
+const RegisterationForm = ({ registerOrganization }) => {
 	const {
 		control,
 		// setError,
@@ -40,9 +40,13 @@ const RegisterationForm = ({registerOrganization}) => {
 		mode: 'onBlur',
 		resolver: yupResolver(organizationRegisterSchema),
 	});
-
+	// function onFileChange() 
 	return (
-		<form noValidate autoComplete='off' onSubmit={handleSubmit(registerOrganization)}>
+		<form
+			noValidate
+			autoComplete='off'
+			onSubmit={handleSubmit(registerOrganization)}
+		>
 			<Grid container spacing={1}>
 				<Grid item xs={12} sm={6}>
 					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
@@ -95,8 +99,8 @@ const RegisterationForm = ({registerOrganization}) => {
 							</FormHelperText>
 						)}
 					</FormControl>
-        </Grid>
-        <Grid item xs={12}>
+				</Grid>
+				<Grid item xs={12}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
 							name='phoneNo'
@@ -110,8 +114,8 @@ const RegisterationForm = ({registerOrganization}) => {
 									placeholder='Phone no'
 									value={value}
 									onBlur={onBlur}
-                  onChange={onChange}
-                  error={Boolean(errors.phoneNo)}
+									onChange={onChange}
+									error={Boolean(errors.phoneNo)}
 								/>
 							)}
 						/>
@@ -174,7 +178,6 @@ const RegisterationForm = ({registerOrganization}) => {
 						)}
 					</FormControl>
 				</Grid>
-				
 				<Grid item xs={12} sm={6}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
@@ -281,7 +284,7 @@ const RegisterationForm = ({registerOrganization}) => {
 					</FormControl>
 				</Grid>
 			</Grid>
-			<Button variant='contained' type='submit' fullWidth>
+			<Button variant='contained' type='submit' fullWidth sx={{ mt: 2 }}>
 				Submit
 			</Button>
 		</form>
