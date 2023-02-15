@@ -57,6 +57,14 @@ export const fetchWrapperUpload = async (
 	const options = {
 		method: _method,
 		mode: 'cors',
+		headers: {
+			Accept: 'application/json',
+			'x-auth-token': window.localStorage.getItem(
+				authConfig.storageTokenKeyName
+			),
+			'Content-Type': body.type,
+			'Content-length':`${body.sizex}`
+		},
 		body: body, // body can be undefined, that's ok
 		...additionalOptions,
 	};

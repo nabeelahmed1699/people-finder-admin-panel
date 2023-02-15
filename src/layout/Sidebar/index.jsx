@@ -27,7 +27,6 @@ function Sidebar({ openDrawer, closeDrawer, drawerOpener, smallScreens }) {
 			anchor='left'
 			open={drawerOpener}
 			onClose={closeDrawer}
-			onOpen={openDrawer}
 			sx={{
 				width: drawerWidth,
 				flexShrink: 0,

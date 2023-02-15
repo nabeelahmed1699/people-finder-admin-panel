@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import { feesReducer } from '../reducer/feesReducer';
+// import { feesReducer } from '../reducer/feesReducer';
 export default combineReducers({
-	feesReducer
+	// feesReducer
 	// rovider_Reducer,
 	// ppointmentReducer,
 	// etting_Reducer,

@@ -10,11 +10,13 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
 
 
-
-
 // custom imports
 import { organizationRegisterSchema } from 'src/constants/validationSchemas';
 import CustomPhoneInput from 'src/components/phoneInput/index';
+import FileUploader from 'src/components/fileUploader';
+
+// icons
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 const defaultValues = {
 	name: 'Sahara Foundation',
@@ -29,7 +31,7 @@ const defaultValues = {
 	BIO: 'We have many missing child, in hope one day some body came and take them to their house.',
 };
 
-const RegisterationForm = ({ registerOrganization }) => {
+const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 	const {
 		control,
 		// setError,
@@ -282,6 +284,15 @@ const RegisterationForm = ({ registerOrganization }) => {
 							</FormHelperText>
 						)}
 					</FormControl>
+				</Grid>
+				<Grid item>
+				<FileUploader
+						icon={<PhotoCameraIcon />}
+						label='Profile Pic Upload'
+						variant='outlined'
+						files={photo}
+						setFiles={setPhoto}
+					/>
 				</Grid>
 			</Grid>
 			<Button variant='contained' type='submit' fullWidth sx={{ mt: 2 }}>
