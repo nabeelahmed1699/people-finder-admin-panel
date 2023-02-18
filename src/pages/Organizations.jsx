@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import _ from 'lodash';
 
 // ** MUI IMPORTS
 import Stack from '@mui/material/Stack';
@@ -13,44 +13,35 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Posts from 'src/features/organizations/posts';
 import CustomModal from 'src/components/modal';
 import RegisterationForm from 'src/features/organizations/registerationForm';
-import {
-	GET_ORGANIZATIONS_API_HANDLER,
-	REGISTER_ORGANIZATIONS_API_HANDLER,
-} from 'src/redux/actions/organizationsAction/actions';
+import { useOrganizations } from 'src/hooks/useOrganinzations';
 
 const Organizations = () => {
-	const dispatch = useDispatch();
 	const [registerationModal, setRegisterationModal] = useState(false);
-	const [organizations, setOrganizations] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [fileUploadModal, setFileUploadModal] = useState(false);
 	const [photo, setPhoto] = useState();
-
+	const { loading, organizations, getOrganizations, registerOrganization } = useOrganizations();
 	const openRegisteration = () => setRegisterationModal(true);
 	const closeRegisteration = () => setRegisterationModal(false);
 
-	const openFileUploadModal = () => setFileUploadModal(true);
-	const closeFileUploadModal = () => setFileUploadModal(false);
-
-	const registerOrganization = async (data) => {
-		const response = await dispatch(
-			REGISTER_ORGANIZATIONS_API_HANDLER({ ...data, photo })
-		);
-		console.log('resws', response);
-		if (response.status >= 200 && response.status <= 299) {
+	function registerOrganizationCalback(data) {
+		const branchaddress = _.pick(data, ['city', 'country', 'state', 'street']);
+		const body = _.pick(data, [
+			'email',
+			'BIO',
+			'branchCode',
+			'branchName',
+			'email',
+			'name',
+			'phoneNo',
+		]);
+		body.branchaddress = branchaddress
+		body.photo = photo
+		
+		registerOrganization(body,() => {
 			closeRegisteration();
-			openFileUploadModal();
 			toast.success('organization registered successfully!');
 			getOrganizations();
-		}
-	};
-
-	const getOrganizations = async () => {
-		setLoading(true);
-		const Data = await dispatch(GET_ORGANIZATIONS_API_HANDLER());
-		setOrganizations(Data);
-		setLoading(false);
-	};
+		})
+	}
 
 	return (
 		<Stack>
@@ -74,30 +65,10 @@ const Organizations = () => {
 				onClose={closeRegisteration}
 			>
 				<RegisterationForm
-					registerOrganization={registerOrganization}
+					registerOrganization={registerOrganizationCalback}
 					photo={photo}
 					setPhoto={setPhoto}
 				/>
-			</CustomModal>
-			<CustomModal
-				title='Upload files'
-				subtitle='upload the files by clicking the buttons below'
-				open={fileUploadModal}
-				onClose={closeFileUploadModal}
-			>
-				<Stack sx={{ gap: 2 }}></Stack>
-				<Stack direction='row' justifyContent='flex-end' sx={{ gap: 1, mt: 2 }}>
-					<Button
-						variant='outlined'
-						color='error'
-						onClick={closeFileUploadModal}
-					>
-						cancel
-					</Button>
-					<Button variant='contained' color='success'>
-						Ok
-					</Button>
-				</Stack>
 			</CustomModal>
 		</Stack>
 	);

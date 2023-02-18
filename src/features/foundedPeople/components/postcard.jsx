@@ -13,8 +13,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 export default function PostCard() {
- 
-
   return (
     <Card>
       <CardHeader

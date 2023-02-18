@@ -33,7 +33,7 @@ const CustomModal = ({
     overflow:'auto'
 	};
 	return (
-		<Modal open={open}>
+		<Modal open={open} onClose={onClose}>
 			<Box sx={style}>
 				<Stack
 					direction='row'

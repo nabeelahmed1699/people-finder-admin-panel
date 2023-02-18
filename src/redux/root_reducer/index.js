@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-// import { feesReducer } from '../reducer/feesReducer';
+import { organizationReducer } from '../reducer/organizationReducer.js';
 export default combineReducers({
-	// feesReducer
+	ORGANIZATIONS:organizationReducer
 	// rovider_Reducer,
 	// ppointmentReducer,
 	// etting_Reducer,

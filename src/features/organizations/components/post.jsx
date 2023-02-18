@@ -18,7 +18,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const ITEM_HEIGHT = 30;
 
-const Post = ({ handleDelete, name,BIO,_id }) => {
+const Post = ({ handleDelete, name,BIO,_id,photo }) => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 
@@ -33,6 +33,7 @@ const Post = ({ handleDelete, name,BIO,_id }) => {
 		handleClose()
 		handleDelete(_id)
 	}
+
 	return (
 		<>
 			<Stack>
@@ -40,22 +41,15 @@ const Post = ({ handleDelete, name,BIO,_id }) => {
 					sx={{
 						'&>img': {
 							maxWidth: '100%',
+							height:'250px'
 						},
 						borderRadius: 1,
 						overflow: 'hidden',
 					}}
 				>
-					<img
-						src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2AzaKg39KUg-xUhZhwNVvOMy2a1n2IdcmCQ&usqp=CAU'
-						alt='organizations'
-					/>
+					<img src={photo} alt={name} />
 				</Box>
 				<Stack direction='row' sx={{ mt: 1 }}>
-					{!!false ? (
-						<Avatar src={'sdsds'} alt={name} />
-					) : (
-						<Avatar>{name.charAt(0).toUpperCase()}</Avatar>
-					)}
 					<Stack sx={{ ml: 1,flexGrow:2 }}>
 						<Stack direction='row' justifyContent='space-between' sx={{width:'100%'}}>
 							<Typography fontWeight={700}>{name}</Typography>

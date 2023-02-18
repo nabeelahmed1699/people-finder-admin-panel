@@ -7,8 +7,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
-
 
 // custom imports
 import { organizationRegisterSchema } from 'src/constants/validationSchemas';
@@ -17,21 +17,31 @@ import FileUploader from 'src/components/fileUploader';
 
 // icons
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import InputLabel from '@mui/material/InputLabel/InputLabel';
+import Select from '@mui/material/Select/Select';
+import { useOrganizations } from 'src/hooks/useOrganinzations';
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 
 const defaultValues = {
-	name: 'Sahara Foundation',
-	branchName: 'Mughal pura',
-	branchCode: '287FE2D',
+	name: 'Ali hassan',
+	fatherName: 'Aslam khan',
+	motherName: 'Naveen khan',
 	city: 'Lahore',
 	country: 'Pakistan',
 	state: 'Punjab',
 	street: 'gulon wala chowk',
-	email: 'sahara@pk.com',
-	phoneNo: '+923244902616',
-	BIO: 'We have many missing children, in the hope one day somebody will come and took them to their house.',
+	cellNo: '+923244902616',
+	description:
+		'We have many missing children, in the hope one day somebody will come and took them to their house.',
+	mentalCondition: 'Fine',
+	physicalCondition: 'Fine',
+	dateFound: '',
+  age: 23,
+  organizationInfo:""
 };
 
-const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
+const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
+	const { loading, organizations } = useOrganizations();
 	const {
 		control,
 		// setError,
@@ -42,7 +52,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 		mode: 'onBlur',
 		resolver: yupResolver(organizationRegisterSchema),
 	});
-	// function onFileChange() 
+
 	return (
 		<form
 			noValidate
@@ -50,6 +60,30 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 			onSubmit={handleSubmit(registerOrganization)}
 		>
 			<Grid container spacing={1}>
+				<Grid item xs={12}>
+					<FormControl fullWidth>
+						<InputLabel id='demo-simple-select-label'>Organization</InputLabel>
+						<Select
+							labelId='demo-simple-select-label'
+							id='demo-simple-select'
+							// value={age}
+							label='Organization'
+							// onChange={handleChange}
+						>
+							{loading > 0 ? (
+								organizations.map((or) => {
+									return (
+										<MenuItem key={or._id} value={or._id}>
+											{or.name}
+										</MenuItem>
+									);
+								})
+							) : (
+								<CircularProgress />
+							)}
+						</Select>
+					</FormControl>
+				</Grid>
 				<Grid item xs={12} sm={6}>
 					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
 						<Controller
@@ -79,25 +113,102 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 				<Grid item xs={12} sm={6}>
 					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
 						<Controller
-							name='email'
+							name='fatherName'
+							control={control}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<TextField
+									autoFocus
+									size='small'
+									label='Father Name'
+									placeholder='Father Name'
+									value={value}
+									onBlur={onBlur}
+									onChange={onChange}
+									error={Boolean(errors.fatherName)}
+								/>
+							)}
+						/>
+						{errors.fatherName && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.fatherName.message}
+							</FormHelperText>
+						)}
+					</FormControl>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
+						<Controller
+							name='motherName'
 							control={control}
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
 									autoFocus
 									size='small'
-									label='Email'
-									placeholder='Email'
+									label='Mother Name'
+									placeholder='Mother Name'
 									value={value}
 									onBlur={onBlur}
 									onChange={onChange}
-									error={Boolean(errors.email)}
+									error={Boolean(errors.motherName)}
 								/>
 							)}
 						/>
-						{errors.email && (
+						{errors.motherName && (
 							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.email.message}
+								{errors.motherName.message}
+							</FormHelperText>
+						)}
+					</FormControl>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<FormControl fullWidth sx={{ mb: 1 }}>
+						<Controller
+							name='mentalCondition'
+							control={control}
+							rules={{ required: true }}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<TextField
+									autoFocus
+									size='small'
+									label='Mental Condition'
+									placeholder='Type about his/her mental condition'
+									value={value}
+									onBlur={onBlur}
+									onChange={onChange}
+									error={Boolean(errors.mentalCondition)}
+								/>
+							)}
+						/>
+						{errors.mentalCondition && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.mentalCondition.message}
+							</FormHelperText>
+						)}
+					</FormControl>
+				</Grid>
+				<Grid item xs={12}>
+					<FormControl fullWidth sx={{ mb: 1 }}>
+						<Controller
+							name='physicalCondition'
+							control={control}
+							rules={{ required: true }}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<TextField
+									autoFocus
+									size='small'
+									label='Physical Condition'
+									placeholder='Type about his/her physical condition'
+									value={value}
+									onBlur={onBlur}
+									onChange={onChange}
+									error={Boolean(errors.physicalCondition)}
+								/>
+							)}
+						/>
+						{errors.physicalCondition && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.physicalCondition.message}
 							</FormHelperText>
 						)}
 					</FormControl>
@@ -124,58 +235,6 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 						{errors.phoneNo && (
 							<FormHelperText sx={{ color: 'error.main' }}>
 								{errors.phoneNo.message}
-							</FormHelperText>
-						)}
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
-						<Controller
-							name='branchName'
-							control={control}
-							rules={{ required: true }}
-							render={({ field: { value, onChange, onBlur } }) => (
-								<TextField
-									autoFocus
-									size='small'
-									label='Branch Name'
-									placeholder='Branch Name'
-									value={value}
-									onBlur={onBlur}
-									onChange={onChange}
-									error={Boolean(errors.branchName)}
-								/>
-							)}
-						/>
-						{errors.branchName && (
-							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.branchName.message}
-							</FormHelperText>
-						)}
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<FormControl fullWidth sx={{ mb: 1 }}>
-						<Controller
-							name='branchCode'
-							control={control}
-							rules={{ required: true }}
-							render={({ field: { value, onChange, onBlur } }) => (
-								<TextField
-									autoFocus
-									size='small'
-									label='Branch Code'
-									placeholder='Branch Code'
-									value={value}
-									onBlur={onBlur}
-									onChange={onChange}
-									error={Boolean(errors.branchCode)}
-								/>
-							)}
-						/>
-						{errors.branchCode && (
-							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.branchCode.message}
 							</FormHelperText>
 						)}
 					</FormControl>
@@ -261,7 +320,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 				<Grid item xs={12}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
-							name='BIO'
+							name='description'
 							control={control}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
@@ -269,24 +328,24 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 									multiline
 									minRows={4}
 									size='small'
-									label='Bio'
-									placeholder='Bio'
+									label='Description'
+									placeholder='give a short description about the person'
 									value={value}
 									onBlur={onBlur}
 									onChange={onChange}
-									error={Boolean(errors.BIO)}
+									error={Boolean(errors.description)}
 								/>
 							)}
 						/>
-						{errors.BIO && (
+						{errors.description && (
 							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.BIO.message}
+								{errors.description.message}
 							</FormHelperText>
 						)}
 					</FormControl>
 				</Grid>
 				<Grid item>
-				<FileUploader
+					<FileUploader
 						icon={<PhotoCameraIcon />}
 						label='Profile Pic Upload'
 						variant='outlined'
@@ -302,4 +361,4 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 	);
 };
 
-export default RegisterationForm;
+export default CreatePostForm;

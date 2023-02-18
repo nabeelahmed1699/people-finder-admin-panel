@@ -7,11 +7,14 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 // custom imports
 import RouterComponent from 'src/routes';
 import { AuthProvider } from './context/AuthContext';
+import  OrganizationsProvider from './context/OrganizationContext';
 import { theme } from './@core/theme';
 
 function App() {	
 	return (
 		<AuthProvider>
+			<OrganizationsProvider>
+
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
 				<Suspense fallback={<div>loading...</div>}>
@@ -19,6 +22,7 @@ function App() {
 					<RouterComponent />
 				</Suspense>
 			</ThemeProvider>
+			</OrganizationsProvider>
 		</AuthProvider>
 	);
 }

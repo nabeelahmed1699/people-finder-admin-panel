@@ -20,12 +20,6 @@ const Posts = ({organizations,getOrganizations,loading}) => {
 	// ** HOOKS
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		getOrganizations();
-	}, []);
-
-	
-
 	const openDeleteModal = (id) => {
 		setDeleteModal(true);
 		setDeleteID(id);

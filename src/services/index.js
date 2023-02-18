@@ -11,3 +11,7 @@ export const GET_ORGANIZATIONS_API = () => fetchWrapper('GET', urls.ORGANIZATION
 export const REGISTER_ORGANIZATIONS_API = (body) => fetchWrapper('POST', urls.ORGANIZATIONS, body);
 export const Delete_ORGANIZATIONS_API = (_id) => fetchWrapper('DELETE', `${urls.ORGANIZATIONS}/${_id}`);
 
+
+
+// Founded Posts
+export const GET_FOUNDED_API = () => fetchWrapper('GET', urls.FOUNDED_PERSONS);
