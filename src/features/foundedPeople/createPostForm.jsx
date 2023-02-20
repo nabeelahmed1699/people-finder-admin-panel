@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
 
 // ** MUI IMPORTS
 import Button from '@mui/material/Button';
@@ -9,9 +10,10 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 
 // custom imports
-import { organizationRegisterSchema } from 'src/constants/validationSchemas';
+import { foundedPostScheme } from 'src/constants/validationSchemas';
 import CustomPhoneInput from 'src/components/phoneInput/index';
 import FileUploader from 'src/components/fileUploader';
 
@@ -21,6 +23,7 @@ import InputLabel from '@mui/material/InputLabel/InputLabel';
 import Select from '@mui/material/Select/Select';
 import { useOrganizations } from 'src/hooks/useOrganinzations';
 import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
+import MaterialDatePicker from 'src/components/datePicker';
 
 const defaultValues = {
 	name: 'Ali hassan',
@@ -35,12 +38,12 @@ const defaultValues = {
 		'We have many missing children, in the hope one day somebody will come and took them to their house.',
 	mentalCondition: 'Fine',
 	physicalCondition: 'Fine',
-	dateFound: '',
-  age: 23,
-  organizationInfo:""
+	dateFound: moment('2014-08-18T21:11:54'),
+	age: 23,
+	organizationInfo: '',
 };
 
-const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
+const CreatePostForm = ({ handleSubmitPost, photo, setPhoto }) => {
 	const { loading, organizations } = useOrganizations();
 	const {
 		control,
@@ -50,41 +53,65 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 	} = useForm({
 		defaultValues,
 		mode: 'onBlur',
-		resolver: yupResolver(organizationRegisterSchema),
+		resolver: yupResolver(foundedPostScheme),
 	});
-
 	return (
 		<form
 			noValidate
 			autoComplete='off'
-			onSubmit={handleSubmit(registerOrganization)}
+			onSubmit={handleSubmit(handleSubmitPost)}
 		>
 			<Grid container spacing={1}>
 				<Grid item xs={12}>
 					<FormControl fullWidth>
-						<InputLabel id='demo-simple-select-label'>Organization</InputLabel>
-						<Select
-							labelId='demo-simple-select-label'
-							id='demo-simple-select'
-							// value={age}
-							label='Organization'
-							// onChange={handleChange}
-						>
-							{loading > 0 ? (
-								organizations.map((or) => {
-									return (
-										<MenuItem key={or._id} value={or._id}>
-											{or.name}
-										</MenuItem>
-									);
-								})
-							) : (
-								<CircularProgress />
+						<Controller
+							name='organizationInfo'
+							control={control}
+							rules={{ required: true }}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<>
+									<InputLabel id='demo-simple-select-label'>
+										Organization
+									</InputLabel>
+									<Select
+										labelId='demo-simple-select-label'
+										id='demo-simple-select'
+										size='small'
+										value={value}
+										label='Organization'
+										onChange={onChange}
+										onBlur={onBlur}
+										error={Boolean(errors.organizationInfo)}
+									>
+										{loading ? (
+											<Stack
+												justifyContent='center'
+												alignItems='center'
+												direction='row'
+											>
+												<CircularProgress />
+											</Stack>
+										) : (
+											organizations.map((or) => {
+												return (
+													<MenuItem key={or._id} value={or._id}>
+														{or.name}
+													</MenuItem>
+												);
+											})
+										)}
+									</Select>
+								</>
 							)}
-						</Select>
+						/>
+						{errors.organizationInfo && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.organizationInfo.message}
+							</FormHelperText>
+						)}
 					</FormControl>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12}>
 					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
 						<Controller
 							name='name'
@@ -92,7 +119,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Name'
 									placeholder='Name'
@@ -117,7 +143,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							control={control}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Father Name'
 									placeholder='Father Name'
@@ -143,7 +168,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Mother Name'
 									placeholder='Mother Name'
@@ -169,7 +193,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Mental Condition'
 									placeholder='Type about his/her mental condition'
@@ -187,7 +210,7 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 						)}
 					</FormControl>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item xs={12} sm={6}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
 							name='physicalCondition'
@@ -195,7 +218,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Physical Condition'
 									placeholder='Type about his/her physical condition'
@@ -213,28 +235,52 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 						)}
 					</FormControl>
 				</Grid>
+				<Grid>
+					<FormControl>
+						<Controller
+							name='dateFound'
+							control={control}
+							rules={{ required: true }}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<MaterialDatePicker
+									size='small'
+									label='Date the person founded'
+									placeholder='Date the person founded'
+									value={value}
+									onBlur={onBlur}
+									onChange={onChange}
+									error={Boolean(errors.dateFound)}
+								/>
+							)}
+						/>
+						{errors.dateFound && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.dateFound.message}
+							</FormHelperText>
+						)}
+					</FormControl>
+				</Grid>
 				<Grid item xs={12}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
-							name='phoneNo'
+							name='cellNo'
 							control={control}
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<CustomPhoneInput
-									autoFocus
 									size='small'
 									label='Phone no'
 									placeholder='Phone no'
 									value={value}
 									onBlur={onBlur}
 									onChange={onChange}
-									error={Boolean(errors.phoneNo)}
+									error={Boolean(errors.cellNo)}
 								/>
 							)}
 						/>
-						{errors.phoneNo && (
+						{errors.cellNo && (
 							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.phoneNo.message}
+								{errors.cellNo.message}
 							</FormHelperText>
 						)}
 					</FormControl>
@@ -247,7 +293,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Country'
 									placeholder='Country'
@@ -273,7 +318,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='City'
 									placeholder='City'
@@ -299,7 +343,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									size='small'
 									label='Street'
 									placeholder='Street'
@@ -324,7 +367,6 @@ const CreatePostForm = ({ registerOrganization, photo, setPhoto }) => {
 							control={control}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
 									multiline
 									minRows={4}
 									size='small'

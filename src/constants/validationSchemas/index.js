@@ -55,5 +55,5 @@ export const foundedPostScheme = yup.object().shape({
 		.matches(phoneRegExp, 'Phone number is not valid')
 		.required('Phone number is a required field'),
 	description: yup.string(),
-	organizationInfo:yup.string().required()
+	organizationInfo:yup.string().required('Organization in a required field!')
 })

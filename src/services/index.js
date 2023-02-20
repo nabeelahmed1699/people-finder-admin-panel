@@ -15,3 +15,4 @@ export const Delete_ORGANIZATIONS_API = (_id) => fetchWrapper('DELETE', `${urls.
 
 // Founded Posts
 export const GET_FOUNDED_API = () => fetchWrapper('GET', urls.FOUNDED_PERSONS);
+export const POST_NEW_FOUNDED_API = () => fetchWrapper('POST', urls.FOUNDED_PERSONS);
