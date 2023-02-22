@@ -25,9 +25,9 @@ const Topbar = ({ smallScreens, drawerWidth, openDrawer }) => {
 				sx={{
 					width: smallScreens ? '100%' : `calc(100% - ${drawerWidth}px)`,
 					ml: smallScreens ? 0 : `${drawerWidth}px`,
-					backgroundColor: 'transparent',
+					backgroundColor: 'background.paper',
 					backgroundImage: 'none',
-					boxShadow: 'none',
+					boxShadow: 1,
 				}}
 			>
 				<Toolbar sx={{ width: '100%' }}>

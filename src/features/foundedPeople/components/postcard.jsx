@@ -1,10 +1,14 @@
 import * as React from 'react';
+import moment from 'moment';
+
+// ** MUI IMPORTS
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import { Table, TableContainer, TableRow, TableCell } from '@mui/material';
+import TableBody from '@mui/material/TableBody';
 import { red } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -13,7 +17,9 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
-import TableBody from '@mui/material/TableBody';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
 // icons
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -21,7 +27,13 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const ITEM_HEIGHT = 30;
 
-export default function PostCard({ loading, handleDelete, person }) {
+export default function PostCard({
+	loading,
+	handleDelete,
+	person,
+	handleViewMore,
+	handleEdit,
+}) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 
@@ -31,53 +43,80 @@ export default function PostCard({ loading, handleDelete, person }) {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
-console.log({person})
+	console.log({ person });
 	if (loading) {
 		return <CircularProgress />;
 	}
 	return (
 		<>
-			<Card>
+			<Card
+				sx={{
+					'& .MuiCardHeader-root, & .MuiCardContent-root': {
+						padding: 2,
+					},
+				}}
+			>
 				<CardHeader
 					avatar={
-						<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
-							R
-						</Avatar>
+						person.organizationInfo ? (
+							<Avatar
+								src={person.organizationInfo.photo}
+								alt={person.organizationInfo.name}
+							/>
+						) : (
+							<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
+								R
+							</Avatar>
+						)
 					}
 					action={
 						<IconButton aria-label='settings' onClick={handleClick}>
 							<MoreVertIcon />
 						</IconButton>
 					}
-					title='Shrimp and Chorizo Paella'
-					subheader='September 14, 2016'
+					title={person.organizationInfo.name}
+					subheader={moment(person.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
 				/>
-				<CardMedia
-					component='img'
-					height='194'
-					image='/static/images/cards/paella.jpg'
-					alt='Paella dish'
-				/>
+
+				{person.photo && (
+					<CardMedia
+						component='img'
+						height='194'
+						image={person.photo}
+						alt={person.name}
+					/>
+				)}
 				<CardContent>
 					<TableContainer>
-						<Table>
+						<Table
+							sx={{
+								'& .MuiTableCell-root': {
+									p: 0.5,
+								},
+							}}
+						>
 							<TableBody>
 								<TableRow>
 									<TableCell>Name</TableCell>
-									<TableCell>Nabeel Ahmed</TableCell>
+									<TableCell>{person.name}</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Age</TableCell>
-									<TableCell>23</TableCell>
+									<TableCell>{person.age}</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>Father Name</TableCell>
+									<TableCell>{person.fatherName}</TableCell>
 								</TableRow>
 							</TableBody>
 						</Table>
 					</TableContainer>
 					<Typography variant='body2' color='text.secondary'>
-						This impressive paella is a perfect party dish and a fun meal to
-						cook together with your guests. Add 1 cup of frozen peas along with
-						the mussels, if you like.
+						{person.description}
 					</Typography>
+					<Stack direction='row' justifyContent='flex-end' sx={{ mt: 2 }}>
+						<Button onClick={() => handleViewMore(person)}>View details</Button>
+					</Stack>
 				</CardContent>
 			</Card>
 			<Menu
@@ -95,13 +134,13 @@ console.log({person})
 					},
 				}}
 			>
-				<MenuItem>
+				<MenuItem onClick={() => handleEdit(person)}>
 					<ListItemIcon>
 						<EditOutlinedIcon fontSize='small' />
 					</ListItemIcon>
 					<ListItemText>Edit</ListItemText>
 				</MenuItem>
-				<MenuItem onClick={handleDelete}>
+				<MenuItem onClick={() => handleDelete(person._id)}>
 					<ListItemIcon>
 						<DeleteOutlineIcon fontSize='small' />
 					</ListItemIcon>

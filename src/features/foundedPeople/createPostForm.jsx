@@ -26,24 +26,46 @@ import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import MaterialDatePicker from 'src/components/datePicker';
 
 const defaultValues = {
-	name: 'Ali hassan',
-	fatherName: 'Aslam khan',
-	motherName: 'Naveen khan',
-	city: 'Lahore',
-	country: 'Pakistan',
-	state: 'Punjab',
-	street: 'gulon wala chowk',
-	cellNo: '+923244902616',
-	description:
-		'We have many missing children, in the hope one day somebody will come and took them to their house.',
-	mentalCondition: 'Fine',
-	physicalCondition: 'Fine',
-	dateFound: moment('2014-08-18T21:11:54'),
+	name: '',
+	fatherName: '',
+	motherName: '',
+	city: '',
+	country: '',
+	state: '',
+	street: '',
+	cellNo: '',
+	description:'',
+	mentalCondition: '',
+	physicalCondition: '',
+	dateFound: '',
 	age: 23,
 	organizationInfo: '',
 };
+// const defaultValues = {
+// 	name: 'Ali hassan',
+// 	fatherName: 'Aslam khan',
+// 	motherName: 'Naveen khan',
+// 	city: 'Lahore',
+// 	country: 'Pakistan',
+// 	state: 'Punjab',
+// 	street: 'gulon wala chowk',
+// 	cellNo: '+923244902616',
+// 	description:
+// 		'We have many missing children, in the hope one day somebody will come and took them to their house.',
+// 	mentalCondition: 'Fine',
+// 	physicalCondition: 'Fine',
+// 	dateFound: moment('2014-08-18T21:11:54'),
+// 	age: 23,
+// 	organizationInfo: '',
+// };
 
-const CreatePostForm = ({ handleSubmitPost, photo, setPhoto }) => {
+const CreatePostForm = ({
+	handleSubmitPost,
+	photo,
+	setPhoto,
+	editPerson,
+	isEdit,
+}) => {
 	const { loading, organizations } = useOrganizations();
 	const {
 		control,
@@ -51,10 +73,11 @@ const CreatePostForm = ({ handleSubmitPost, photo, setPhoto }) => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
-		defaultValues,
+		defaultValues: isEdit ? editPerson : defaultValues,
 		mode: 'onBlur',
 		resolver: yupResolver(foundedPostScheme),
 	});
+	console.log({isEdit,editPerson})
 	return (
 		<form
 			noValidate
@@ -235,7 +258,7 @@ const CreatePostForm = ({ handleSubmitPost, photo, setPhoto }) => {
 						)}
 					</FormControl>
 				</Grid>
-				<Grid>
+				<Grid item xs={6}>
 					<FormControl>
 						<Controller
 							name='dateFound'
@@ -244,8 +267,9 @@ const CreatePostForm = ({ handleSubmitPost, photo, setPhoto }) => {
 							render={({ field: { value, onChange, onBlur } }) => (
 								<MaterialDatePicker
 									size='small'
-									label='Date the person founded'
-									placeholder='Date the person founded'
+									fullWidth
+									label='Located Date'
+									placeholder='Located Date'
 									value={value}
 									onBlur={onBlur}
 									onChange={onChange}
@@ -260,7 +284,7 @@ const CreatePostForm = ({ handleSubmitPost, photo, setPhoto }) => {
 						)}
 					</FormControl>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item xs={6}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
 							name='cellNo'

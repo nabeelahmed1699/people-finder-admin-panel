@@ -9,7 +9,7 @@ import Topbar from './Topbar';
 const drawerWidth = 240;
 
 const Layout = () => {
-	const smallScreens = useMediaQuery('(max-width:600px)');
+	const smallScreens = useMediaQuery('(max-width:900px)');
 	const [drawer, setDrawer] = useState(() => (smallScreens ? false : true));
 	const openDrawer = () => setDrawer(true);
 	const closeDrawer = () => setDrawer(false);

@@ -58,7 +58,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='Name'
 									placeholder='Name'
@@ -84,7 +84,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='Email'
 									placeholder='Email'
@@ -110,7 +110,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<CustomPhoneInput
-									autoFocus
+									
 									size='small'
 									label='Phone no'
 									placeholder='Phone no'
@@ -136,7 +136,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='Branch Name'
 									placeholder='Branch Name'
@@ -162,7 +162,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='Branch Code'
 									placeholder='Branch Code'
@@ -188,7 +188,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='Country'
 									placeholder='Country'
@@ -214,7 +214,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='City'
 									placeholder='City'
@@ -240,7 +240,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									size='small'
 									label='Street'
 									placeholder='Street'
@@ -265,7 +265,7 @@ const RegisterationForm = ({ registerOrganization,photo,setPhoto }) => {
 							control={control}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<TextField
-									autoFocus
+									
 									multiline
 									minRows={4}
 									size='small'

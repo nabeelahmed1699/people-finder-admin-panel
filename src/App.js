@@ -1,5 +1,5 @@
-import { Suspense, } from 'react';
-import ToastContainer from "react-hot-toast"
+import { Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 // ** MUI IMPORTS
 import { CssBaseline, ThemeProvider } from '@mui/material';
@@ -7,21 +7,20 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 // custom imports
 import RouterComponent from 'src/routes';
 import { AuthProvider } from './context/AuthContext';
-import  OrganizationsProvider from './context/OrganizationContext';
+import OrganizationsProvider from './context/OrganizationContext';
 import { theme } from './@core/theme';
 
-function App() {	
+function App() {
 	return (
 		<AuthProvider>
 			<OrganizationsProvider>
-
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<Suspense fallback={<div>loading...</div>}>
-					<ToastContainer/>
-					<RouterComponent />
-				</Suspense>
-			</ThemeProvider>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<Suspense fallback={<div>loading...</div>}>
+						<Toaster position='top-right' reverseOrder={true} />
+						<RouterComponent />
+					</Suspense>
+				</ThemeProvider>
 			</OrganizationsProvider>
 		</AuthProvider>
 	);
