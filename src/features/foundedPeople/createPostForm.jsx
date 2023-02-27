@@ -25,22 +25,7 @@ import { useOrganizations } from 'src/hooks/useOrganinzations';
 import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import MaterialDatePicker from 'src/components/datePicker';
 
-const defaultValues = {
-	name: '',
-	fatherName: '',
-	motherName: '',
-	city: '',
-	country: '',
-	state: '',
-	street: '',
-	cellNo: '',
-	description:'',
-	mentalCondition: '',
-	physicalCondition: '',
-	dateFound: '',
-	age: 23,
-	organizationInfo: '',
-};
+
 // const defaultValues = {
 // 	name: 'Ali hassan',
 // 	fatherName: 'Aslam khan',
@@ -67,6 +52,22 @@ const CreatePostForm = ({
 	isEdit,
 }) => {
 	const { loading, organizations } = useOrganizations();
+	const defaultValues = {
+		name: '',
+		fatherName: '',
+		motherName: '',
+		city: '',
+		country: '',
+		state: '',
+		street: '',
+		cellNo: '',
+		description:'',
+		mentalCondition: '',
+		physicalCondition: '',
+		dateFound: '',
+		age: 0,
+		organizationInfo: '',
+	};
 	const {
 		control,
 		// setError,
@@ -413,7 +414,7 @@ const CreatePostForm = ({
 				<Grid item>
 					<FileUploader
 						icon={<PhotoCameraIcon />}
-						label='Profile Pic Upload'
+						label='Add Picture'
 						variant='outlined'
 						files={photo}
 						setFiles={setPhoto}

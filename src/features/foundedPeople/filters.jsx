@@ -5,7 +5,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 
 // icons
@@ -23,7 +22,7 @@ const Filters = ({ nameFilter, setNameFilter }) => {
 				<Grid container spacing={1}>
 					<Grid item xs={12}>
 						<TextField
-							label='Filter by name'
+							placeholder='Search by name | age | father name | mother name | address'
 							fullWidth
 							value={nameFilter}
 							onChange={(e) => setNameFilter(e.target.value)}
@@ -40,16 +39,6 @@ const Filters = ({ nameFilter, setNameFilter }) => {
 							}}
 						/>
 					</Grid>
-					{/* <Grid item xs={6} sm={2}>
-						<Button
-							variant='outlined'
-							fullWidth
-							size='large'
-							onClick={handleSearch}
-						>
-							Search
-						</Button>
-					</Grid> */}
 				</Grid>
 			</CardContent>
 		</Card>

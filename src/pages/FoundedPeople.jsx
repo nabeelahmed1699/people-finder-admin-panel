@@ -48,9 +48,21 @@ const FoundedPeople = () => {
 	}, []);
 
 	async function getFoundedPeopleList() {
-		const response = await dispatch(GET_FOUNDED_API_HANDLER());
-		setFoundedPeople(response);
-		setLoading(false);
+		try {		
+			const response = await dispatch(GET_FOUNDED_API_HANDLER());
+			if (response.status >= 200 && response.status <= 299) {
+				const queriedablePeople = response.people.map(person => {
+					const { name, age, fatherName, motherName } = person
+					const {street,city,country} = person.address
+					return {...person,query:`${name}${age}${fatherName}${motherName}${street}${city}${country}`}
+				})
+				setFoundedPeople(queriedablePeople);
+				setLoading(false);
+				
+			}
+		} catch (error) {
+			toast.error('Something went wrong!')
+		}
 	}
 
 	async function handleSubmitPost(data) {
@@ -100,14 +112,14 @@ const FoundedPeople = () => {
 	const postsList = useMemo(() => {
 
 		if (nameFilter.length === 0) return foundedPeople
-		return foundedPeople.filter((person)=>person.name.toLowerCase().includes(nameFilter.toLowerCase()))
+		return foundedPeople.filter((person)=>person.query.toLowerCase().includes(nameFilter.toLowerCase()))
 
 	}, [nameFilter, foundedPeople])
 	
 	function handleEdit(person) {
 		setForDetailPerson(person);
 		openCreateForm()
-		setIsEdit()
+		setIsEdit(true)
 	}
 
 	return (
