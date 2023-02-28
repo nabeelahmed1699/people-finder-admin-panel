@@ -13,7 +13,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 
 // custom imports
-import { foundedPostScheme } from 'src/constants/validationSchemas';
+import { missingPostScheme } from 'src/constants/validationSchemas';
 import CustomPhoneInput from 'src/components/phoneInput/index';
 import FileUploader from 'src/components/fileUploader';
 
@@ -25,6 +25,25 @@ import { useOrganizations } from 'src/hooks/useOrganinzations';
 import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import MaterialDatePicker from 'src/components/datePicker';
 
+
+const defaultValues = {
+	name: 'Ali hassan',
+	fatherName: 'Aslam khan',
+	motherName: 'Naveen khan',
+	city: 'Lahore',
+	country: 'Pakistan',
+	state: 'Punjab',
+	street: 'gulon wala chowk',
+	cellNo: '+923244902616',
+	description:
+		'We have many missing children, in the hope one day somebody will come and took them to their house.',
+	mentalCondition: 'Fine',
+	physicalCondition: 'Fine',
+	dateFound: moment('2014-08-18T21:11:54'),
+	age: 23,
+	organizationInfo: '',
+};
+
 const CreatePostForm = ({
 	handleSubmitPost,
 	photo,
@@ -32,34 +51,34 @@ const CreatePostForm = ({
 	editPerson,
 	isEdit,
 }) => {
-	const defaultValues = {
-		name: '',
-		fatherName: '',
-		motherName: '',
-		city: '',
-		country: '',
-		state: '',
-		street: '',
-		cellNo: '',
-		description:'',
-		mentalCondition: '',
-		physicalCondition: '',
-		dateFound: moment(),
-		age: 23,
-		organizationInfo: isEdit ? editPerson.organizationInfo._id : '',
-	};
 	const { loading, organizations } = useOrganizations();
+	const editableObject = {
+		name: editPerson.name,
+		fatherName: editPerson.fatherName,
+		motherName: editPerson.motherName,
+		city: editPerson.address.city,
+		country: editPerson.address.country,
+		state: editPerson.address.state,
+		street: editPerson.address.street,
+		cellNo: editPerson.cellNo,
+		description:editPerson.description,
+		mentalCondition: editPerson.mentalCondition,
+		physicalCondition: editPerson.physicalCondition,
+		dateFound: editPerson.dateFound,
+		age: editPerson.age,
+		organizationInfo: editPerson.organizationInfo._id,
+	};
 	const {
 		control,
 		// setError,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
-		defaultValues: isEdit ? editPerson : defaultValues,
+		defaultValues: isEdit ? editableObject : defaultValues,
 		mode: 'onBlur',
-		resolver: yupResolver(foundedPostScheme),
+		resolver: yupResolver(missingPostScheme),
 	});
-	console.log({ isEdit, editPerson });
+	console.log({isEdit,editPerson})
 	return (
 		<form
 			noValidate
@@ -68,7 +87,7 @@ const CreatePostForm = ({
 		>
 			<Grid container spacing={1}>
 				<Grid item xs={12}>
-					<FormControl fullWidth disabled={isEdit}>
+					<FormControl fullWidth>
 						<Controller
 							name='organizationInfo'
 							control={control}
@@ -243,25 +262,25 @@ const CreatePostForm = ({
 				<Grid item xs={6}>
 					<FormControl>
 						<Controller
-							name='dateFound'
+							name='dateMissing'
 							control={control}
 							rules={{ required: true }}
 							render={({ field: { value, onChange, onBlur } }) => (
 								<MaterialDatePicker
 									size='small'
 									fullWidth
-									label='Located Date'
-									placeholder='Located Date'
+									label='Missing Date'
+									placeholder='Missing Date'
 									value={value}
 									onBlur={onBlur}
 									onChange={onChange}
-									error={Boolean(errors.dateFound)}
+									error={Boolean(errors.dateMissing)}
 								/>
 							)}
 						/>
-						{errors.dateFound && (
+						{errors.dateMissing && (
 							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.dateFound.message}
+								{errors.dateMissing.message}
 							</FormHelperText>
 						)}
 					</FormControl>

@@ -48,7 +48,7 @@ function Details({ person }) {
 						</TableRow>
 						<TableRow>
 							<TableCell>Address where found:</TableCell>
-							<TableCell>{`${person.street}, ${person.city} ${person.country}`}</TableCell>
+							<TableCell>{`${person.address.street}, ${person.address.city} ${person.address.country}`}</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>

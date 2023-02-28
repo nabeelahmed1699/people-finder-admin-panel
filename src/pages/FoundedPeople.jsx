@@ -17,6 +17,7 @@ import {
 	DELETE_FOUNDED_POST_API_HANDLER,
 	GET_FOUNDED_API_HANDLER,
 	POST_FOUNDED_API_HANDLER,
+	UPDATE_FOUNDED_API_HANDLER,
 } from 'src/redux/actions/foundedPersonsAction/actions';
 import CustomModal from 'src/components/modal';
 import CreatePostForm from 'src/features/foundedPeople/createPostForm';
@@ -35,7 +36,7 @@ const FoundedPeople = () => {
 
 
 	const openCreateForm = () => setCreatePost(true);
-	const closeCreateForm = () => setCreatePost(false);
+	const closeCreateForm = () => {setCreatePost(false);setIsEdit(false)}
 
 	const openDetailModal = () => setDetailModal(true);
 	const closeDetailModal = () => setDetailModal(false);
@@ -52,8 +53,7 @@ const FoundedPeople = () => {
 			const response = await dispatch(GET_FOUNDED_API_HANDLER());
 			if (response.status >= 200 && response.status <= 299) {
 				const queriedablePeople = response.people.map(person => {
-					const { name, age, fatherName, motherName } = person
-					const {street,city,country} = person.address
+					const { name, age, fatherName, motherName,street,city,country } = person
 					return {...person,query:`${name}${age}${fatherName}${motherName}${street}${city}${country}`}
 				})
 				setFoundedPeople(queriedablePeople);
@@ -64,30 +64,24 @@ const FoundedPeople = () => {
 			toast.error('Something went wrong!')
 		}
 	}
-
+	useEffect(() => {
+	console.log(foundedPeople)
+},[foundedPeople])
 	async function handleSubmitPost(data) {
-		const address = {
-			city: data.city,
-			state: data.state,
-			street: data.street,
-			country: data.country,
-		};
-		const body = _.pick(data, [
-			'name',
-			'fatherName',
-			'motherName',
-			'age',
-			'dateFound',
-			'physicalCondition',
-			'mentalCondition',
-			'cellNo',
-			'description',
-			'organizationInfo',
-		]);
-		body.address = address;
+		console.log({data})
+		setLoading(true)
+		if (isEdit) {
+			const response = await dispatch(UPDATE_FOUNDED_API_HANDLER(forDetailPerson._id,{ ...data, photo }))
+			if (response.status >= 200 && response.status <= 299) {
+				getFoundedPeopleList();
+			}
+			closeCreateForm();
+			setLoading(false)
+			return
+		}
 
 		const response = await dispatch(
-			POST_FOUNDED_API_HANDLER({ ...body, photo })
+			POST_FOUNDED_API_HANDLER({ ...data, photo })
 		);
 
 		if (response.status >= 200 && response.status <= 299) {
@@ -98,10 +92,8 @@ const FoundedPeople = () => {
 
 	async function handleDelete(_id) {
 		const response = await dispatch(DELETE_FOUNDED_POST_API_HANDLER(_id));
-		if (response.status >= 200 && response.status <= 299) {
-			getFoundedPeopleList();
-			toast.success('Post deleted successfully!');
-		}
+		getFoundedPeopleList();
+		toast.success('Post deleted successfully!');
 	}
 
 	function handleViewMore(person) {

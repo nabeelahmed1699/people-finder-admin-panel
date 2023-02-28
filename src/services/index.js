@@ -18,3 +18,9 @@ export const GET_FOUNDED_API = () => fetchWrapper('GET', urls.FOUNDED_PERSONS);
 export const POST_NEW_FOUNDED_API = (body) => fetchWrapper('POST', urls.FOUNDED_PERSONS,body);
 export const UPDATE_FOUNDED_API = (_id,body) => fetchWrapper('PATCH', `${urls.FOUNDED_PERSONS}/${_id}`,body);
 export const DELETE_FOUNDED_POST = (_id)=> fetchWrapper('DELETE',`${urls.FOUNDED_PERSONS}/${_id}`)
+
+// Founded Posts
+export const GET_MISSING_PEOPLE_API = () => fetchWrapper('GET', urls.MISSING_PERSONS);
+export const POST_NEW_MISSING_PERSON_API = (body) => fetchWrapper('POST', urls.MISSING_PERSONS,body);
+export const UPDATE_MISSING_PERSON_API = (_id,body) => fetchWrapper('PATCH', `${urls.MISSING_PERSONS}/${_id}`,body);
+export const DELETE_MISSING_PERSON_POST = (_id)=> fetchWrapper('DELETE',`${urls.MISSING_PERSONS}/${_id}`)

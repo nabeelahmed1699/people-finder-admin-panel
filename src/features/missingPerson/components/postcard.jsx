@@ -47,7 +47,6 @@ export default function PostCard({
 	if (loading) {
 		return <CircularProgress />;
 	}
-	console.log({person})
 	return (
 		<>
 			<Card

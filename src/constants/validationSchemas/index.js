@@ -57,3 +57,22 @@ export const foundedPostScheme = yup.object().shape({
 	description: yup.string(),
 	organizationInfo:yup.string().required('Organization in a required field!')
 })
+
+export const missingPostScheme = yup.object().shape({
+	name: yup.string().required(),
+	fatherName: yup.string(),
+	motherName:yup.string(),
+	age: yup.number().required(),
+	country: yup.string().required(),
+	city: yup.string().required(),
+	street: yup.string(),
+	dateMissing:yup.date().required(),
+	physicalCondition:yup.string(),
+	mentalCondition:yup.string(),
+	cellNo: yup
+		.string()
+		.matches(phoneRegExp, 'Phone number is not valid')
+		.required('Phone number is a required field'),
+	description: yup.string(),
+	posterInfo:yup.string().required('Organization in a required field!')
+})
