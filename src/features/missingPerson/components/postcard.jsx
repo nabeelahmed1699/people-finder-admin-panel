@@ -60,8 +60,8 @@ export default function PostCard({
 					avatar={
 						person.organizationInfo ? (
 							<Avatar
-								src={person.organizationInfo.photo}
-								alt={person.organizationInfo.name}
+								src={person.posterInfo.photo}
+								alt={person.posterInfo.name}
 							/>
 						) : (
 							<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
@@ -74,7 +74,7 @@ export default function PostCard({
 							<MoreVertIcon />
 						</IconButton>
 					}
-					title={person.organizationInfo.name}
+					title={person.posterInfo.name}
 					subheader={moment(person.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
 				/>
 

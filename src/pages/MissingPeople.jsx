@@ -10,9 +10,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-
 // custom imports
-import PostCard from 'src/features/foundedPeople/components/postcard';
+import PostCard from 'src/features/missingPerson/components/postcard';
 import {
 	DELETE_MISSING_PERSON_POST_HANDLER,
 	GET_MISSING_PEOPLE_API_HANDLER,
@@ -23,21 +22,24 @@ import {
 import CustomModal from 'src/components/modal';
 import CreatePostForm from 'src/features/missingPerson/createPostForm';
 import Filters from 'src/features/missingPerson/filters';
-import Details from 'src/features/missingPerson/components/details'
+import Details from 'src/features/missingPerson/components/details';
+import { authConfig } from 'src/constants/configs/auth';
 
 const MissingPeople = () => {
-	const [foundedPeople, setFoundedPeople] = useState([]);
+	const [missingPeople, setMissingPeople] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [createPost, setCreatePost] = useState(false);
 	const [photo, setPhoto] = useState('');
 	const [forDetailPerson, setForDetailPerson] = useState({});
 	const [detailModal, setDetailModal] = useState(false);
-	const [nameFilter, setNameFilter] = useState("")
-	const [isEdit,setIsEdit] = useState(false)
-
+	const [nameFilter, setNameFilter] = useState('');
+	const [isEdit, setIsEdit] = useState(false);
 
 	const openCreateForm = () => setCreatePost(true);
-	const closeCreateForm = () => {setCreatePost(false);setIsEdit(false)}
+	const closeCreateForm = () => {
+		setCreatePost(false);
+		setIsEdit(false);
+	};
 
 	const openDetailModal = () => setDetailModal(true);
 	const closeDetailModal = () => setDetailModal(false);
@@ -46,35 +48,33 @@ const MissingPeople = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		getFoundedPeopleList();
+		getMissingPeopleList();
 	}, []);
 
-	async function getFoundedPeopleList() {
-		try {		
+	async function getMissingPeopleList() {
+		try {
 			const response = await dispatch(GET_MISSING_PEOPLE_API_HANDLER());
+			console.log({ response });
 			if (response.status >= 200 && response.status <= 299) {
-				const queriedablePeople = response.people.map(person => {
-					const { name, age, fatherName, motherName } = person
-					const {street,city,country} = person.address
-					return {...person,query:`${name}${age}${fatherName}${motherName}${street}${city}${country}`}
-				})
-				setFoundedPeople(queriedablePeople);
+				const queriedablePeople = response.people.map((person) => {
+					const { name, age, fatherName, motherName } = person;
+					const { street, city, country } = person;
+					return {
+						...person,
+						query: `${name}${age}${fatherName}${motherName}${street}${city}${country}`,
+					};
+				});
+				console.log({ queriedablePeople });
+				setMissingPeople(queriedablePeople);
 				setLoading(false);
-				
 			}
 		} catch (error) {
-			toast.error('Something went wrong!')
+			toast.error('Something went wrong!');
 		}
 	}
 
 	async function handleSubmitPost(data) {
-		setLoading(true)
-		const address = {
-			city: data.city,
-			state: data.state,
-			street: data.street,
-			country: data.country,
-		};
+		setLoading(true);
 		const body = _.pick(data, [
 			'name',
 			'fatherName',
@@ -85,18 +85,27 @@ const MissingPeople = () => {
 			'mentalCondition',
 			'cellNo',
 			'description',
-			'organizationInfo',
+			'city',
+			'state',
+			'street',
+			'country',
 		]);
-		body.address = address;
-
+		const userData = JSON.parse(localStorage.getItem(authConfig.userData));
+		const { _id } = userData.data;
+		body.posterInfo = _id;
 		if (isEdit) {
-			const response = await dispatch(UPDATE_MISSING_PERSON_API_HANDLER(forDetailPerson._id,{ ...body, photo }))
+			const response = await dispatch(
+				UPDATE_MISSING_PERSON_API_HANDLER(forDetailPerson._id, {
+					...body,
+					photo,
+				})
+			);
 			if (response.status >= 200 && response.status <= 299) {
-				getFoundedPeopleList();
+				getMissingPeopleList();
 			}
 			closeCreateForm();
-			setLoading(false)
-			return
+			setLoading(false);
+			return;
 		}
 
 		const response = await dispatch(
@@ -104,16 +113,21 @@ const MissingPeople = () => {
 		);
 
 		if (response.status >= 200 && response.status <= 299) {
-			getFoundedPeopleList();
+			getMissingPeopleList();
 		}
 		closeCreateForm();
 	}
 
 	async function handleDelete(_id) {
-		const response = await dispatch(DELETE_MISSING_PERSON_POST_HANDLER(_id));
-		if (response.status >= 200 && response.status <= 299) {
-			getFoundedPeopleList();
-			toast.success('Post deleted successfully!');
+		console.log({ _id });
+		try {
+			const response = await dispatch(DELETE_MISSING_PERSON_POST_HANDLER(_id));
+			if (response.status >= 200 && response.status <= 299) {
+				getMissingPeopleList();
+				toast.success('Post deleted successfully!');
+			}
+		} catch (error) {
+			toast.error('something went wrong try again!');
 		}
 	}
 
@@ -123,16 +137,16 @@ const MissingPeople = () => {
 	}
 
 	const postsList = useMemo(() => {
+		if (nameFilter.length === 0) return missingPeople;
+		return missingPeople.filter((person) =>
+			person.query.toLowerCase().includes(nameFilter.toLowerCase())
+		);
+	}, [nameFilter, missingPeople]);
 
-		if (nameFilter.length === 0) return foundedPeople
-		return foundedPeople.filter((person)=>person.query.toLowerCase().includes(nameFilter.toLowerCase()))
-
-	}, [nameFilter, foundedPeople])
-	
 	function handleEdit(person) {
 		setForDetailPerson(person);
-		openCreateForm()
-		setIsEdit(true)
+		openCreateForm();
+		setIsEdit(true);
 	}
 
 	return (
@@ -145,11 +159,12 @@ const MissingPeople = () => {
 			<Stack alignItems='center'>
 				<Typography variant='h4'>Missing People</Typography>
 				<Typography paragraph>
-					These are people who are missing from home and separated from their loved ones.
+					These are people who are missing from home and separated from their
+					loved ones.
 				</Typography>
 			</Stack>
-			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter}/>
-			{foundedPeople.length > 0 ? (
+			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter} />
+			{missingPeople.length > 0 ? (
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{postsList.map((person) => {
 						return (
@@ -157,7 +172,7 @@ const MissingPeople = () => {
 								<PostCard
 									loading={loading}
 									handleDelete={handleDelete}
-									handleEdit = {handleEdit}
+									handleEdit={handleEdit}
 									person={person}
 									handleViewMore={handleViewMore}
 								/>
@@ -175,7 +190,10 @@ const MissingPeople = () => {
 			)}
 			<CustomModal
 				open={createPost}
-				onClose={() => { closeCreateForm(); setIsEdit()}}
+				onClose={() => {
+					closeCreateForm();
+					setIsEdit();
+				}}
 				title='Create a post'
 				subtitle="fill up the information about the person you've founded"
 			>
@@ -189,7 +207,7 @@ const MissingPeople = () => {
 			</CustomModal>
 			{!_.isEmpty(forDetailPerson) && (
 				<CustomModal
-					title={forDetailPerson.organizationInfo.name}
+					title={forDetailPerson.posterInfo.name}
 					subtitle={moment(forDetailPerson.createdAt).format(
 						'MMMM Do YYYY, h:mm:ss a'
 					)}
@@ -202,7 +220,5 @@ const MissingPeople = () => {
 		</>
 	);
 };
-
-
 
 export default MissingPeople;

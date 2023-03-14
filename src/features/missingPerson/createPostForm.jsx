@@ -8,10 +8,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-
 // custom imports
 import { missingPostScheme } from 'src/constants/validationSchemas';
 import CustomPhoneInput from 'src/components/phoneInput/index';
@@ -19,10 +16,6 @@ import FileUploader from 'src/components/fileUploader';
 
 // icons
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import InputLabel from '@mui/material/InputLabel/InputLabel';
-import Select from '@mui/material/Select/Select';
-import { useOrganizations } from 'src/hooks/useOrganinzations';
-import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import MaterialDatePicker from 'src/components/datePicker';
 
 
@@ -30,18 +23,17 @@ const defaultValues = {
 	name: 'Ali hassan',
 	fatherName: 'Aslam khan',
 	motherName: 'Naveen khan',
+	age: 23,
 	city: 'Lahore',
 	country: 'Pakistan',
 	state: 'Punjab',
 	street: 'gulon wala chowk',
-	cellNo: '+923244902616',
-	description:
-		'We have many missing children, in the hope one day somebody will come and took them to their house.',
+	dateMissing: moment('2014-08-18T21:11:54'),
 	mentalCondition: 'Fine',
 	physicalCondition: 'Fine',
-	dateFound: moment('2014-08-18T21:11:54'),
-	age: 23,
-	organizationInfo: '',
+	cellNo: '+923244902616',
+	description:
+	'We have many missing children, in the hope one day somebody will come and took them to their house.',
 };
 
 const CreatePostForm = ({
@@ -51,32 +43,15 @@ const CreatePostForm = ({
 	editPerson,
 	isEdit,
 }) => {
-	const { loading, organizations } = useOrganizations();
-	const editableObject = {
-		name: editPerson.name,
-		fatherName: editPerson.fatherName,
-		motherName: editPerson.motherName,
-		city: editPerson.address.city,
-		country: editPerson.address.country,
-		state: editPerson.address.state,
-		street: editPerson.address.street,
-		cellNo: editPerson.cellNo,
-		description:editPerson.description,
-		mentalCondition: editPerson.mentalCondition,
-		physicalCondition: editPerson.physicalCondition,
-		dateFound: editPerson.dateFound,
-		age: editPerson.age,
-		organizationInfo: editPerson.organizationInfo._id,
-	};
 	const {
 		control,
 		// setError,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
-		defaultValues: isEdit ? editableObject : defaultValues,
+		defaultValues: isEdit ? editPerson : defaultValues,
 		mode: 'onBlur',
-		resolver: yupResolver(missingPostScheme),
+			resolver: yupResolver(missingPostScheme),
 	});
 	console.log({isEdit,editPerson})
 	return (
@@ -86,55 +61,6 @@ const CreatePostForm = ({
 			onSubmit={handleSubmit(handleSubmitPost)}
 		>
 			<Grid container spacing={1}>
-				<Grid item xs={12}>
-					<FormControl fullWidth>
-						<Controller
-							name='organizationInfo'
-							control={control}
-							rules={{ required: true }}
-							render={({ field: { value, onChange, onBlur } }) => (
-								<>
-									<InputLabel id='demo-simple-select-label'>
-										Organization
-									</InputLabel>
-									<Select
-										labelId='demo-simple-select-label'
-										id='demo-simple-select'
-										size='small'
-										value={value}
-										label='Organization'
-										onChange={onChange}
-										onBlur={onBlur}
-										error={Boolean(errors.organizationInfo)}
-									>
-										{loading ? (
-											<Stack
-												justifyContent='center'
-												alignItems='center'
-												direction='row'
-											>
-												<CircularProgress />
-											</Stack>
-										) : (
-											organizations.map((or) => {
-												return (
-													<MenuItem key={or._id} value={or._id}>
-														{or.name}
-													</MenuItem>
-												);
-											})
-										)}
-									</Select>
-								</>
-							)}
-						/>
-						{errors.organizationInfo && (
-							<FormHelperText sx={{ color: 'error.main' }}>
-								{errors.organizationInfo.message}
-							</FormHelperText>
-						)}
-					</FormControl>
-				</Grid>
 				<Grid item xs={12}>
 					<FormControl fullWidth sx={{ mb: 1 }} size='small'>
 						<Controller
@@ -360,7 +286,7 @@ const CreatePostForm = ({
 						)}
 					</FormControl>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item xs={6}>
 					<FormControl fullWidth sx={{ mb: 1 }}>
 						<Controller
 							name='street'
@@ -381,6 +307,31 @@ const CreatePostForm = ({
 						{errors.street && (
 							<FormHelperText sx={{ color: 'error.main' }}>
 								{errors.street.message}
+							</FormHelperText>
+						)}
+					</FormControl>
+				</Grid>
+				<Grid item xs={6}>
+					<FormControl fullWidth sx={{ mb: 1 }}>
+						<Controller
+							name='state'
+							control={control}
+							rules={{ required: true }}
+							render={({ field: { value, onChange, onBlur } }) => (
+								<TextField
+									size='small'
+									label='State'
+									placeholder='State'
+									value={value}
+									onBlur={onBlur}
+									onChange={onChange}
+									error={Boolean(errors.state)}
+								/>
+							)}
+						/>
+						{errors.state && (
+							<FormHelperText sx={{ color: 'error.main' }}>
+								{errors.state.message}
 							</FormHelperText>
 						)}
 					</FormControl>

@@ -66,6 +66,7 @@ export const missingPostScheme = yup.object().shape({
 	country: yup.string().required(),
 	city: yup.string().required(),
 	street: yup.string(),
+	state:yup.string(),
 	dateMissing:yup.date().required(),
 	physicalCondition:yup.string(),
 	mentalCondition:yup.string(),
@@ -74,5 +75,4 @@ export const missingPostScheme = yup.object().shape({
 		.matches(phoneRegExp, 'Phone number is not valid')
 		.required('Phone number is a required field'),
 	description: yup.string(),
-	posterInfo:yup.string().required('Organization in a required field!')
 })
