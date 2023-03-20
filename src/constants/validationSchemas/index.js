@@ -28,51 +28,58 @@ export const organizationRegisterSchema = yup.object().shape({
 		.string()
 		.matches(phoneRegExp, 'Phone number is not valid')
 		.required('Phone number is a required field'),
-	BIO:yup.string()
+	BIO: yup.string(),
 });
-
 
 export const loginSchema = yup.object().shape({
 	email: yup.string().email().required(),
 	password: yup.string().min(3).max(20).required(),
 });
 
-
-
 export const foundedPostScheme = yup.object().shape({
 	name: yup.string().required(),
 	fatherName: yup.string(),
-	motherName:yup.string(),
+	motherName: yup.string(),
 	age: yup.number().required(),
 	country: yup.string().required(),
 	city: yup.string().required(),
 	street: yup.string(),
-	dateFound:yup.date().required(),
-	physicalCondition:yup.string(),
-	mentalCondition:yup.string(),
+	dateFound: yup.date().required(),
+	physicalCondition: yup.string(),
+	mentalCondition: yup.string(),
 	cellNo: yup
 		.string()
 		.matches(phoneRegExp, 'Phone number is not valid')
 		.required('Phone number is a required field'),
 	description: yup.string(),
-	organizationInfo:yup.string().required('Organization in a required field!')
-})
+	organizationInfo: yup.string().required('Organization in a required field!'),
+});
 
 export const missingPostScheme = yup.object().shape({
 	name: yup.string().required(),
 	fatherName: yup.string(),
-	motherName:yup.string(),
+	motherName: yup.string(),
 	age: yup.number().required(),
 	country: yup.string().required(),
 	city: yup.string().required(),
 	street: yup.string(),
-	state:yup.string(),
-	dateMissing:yup.date().required(),
-	physicalCondition:yup.string(),
-	mentalCondition:yup.string(),
+	state: yup.string(),
+	dateMissing: yup.date().required(),
+	physicalCondition: yup.string(),
+	mentalCondition: yup.string(),
 	cellNo: yup
 		.string()
 		.matches(phoneRegExp, 'Phone number is not valid')
 		.required('Phone number is a required field'),
 	description: yup.string(),
-})
+});
+
+export const registerUser = yup.object().shape({
+  name: yup.string().required(),
+  email: yup.string().email().required(),
+  gender: yup.string().required(),
+  DOB: yup.date().required(),
+  password: yup.string().required(),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+});
+

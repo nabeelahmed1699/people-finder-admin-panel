@@ -25,7 +25,7 @@ const Topbar = ({ smallScreens, drawerWidth, openDrawer }) => {
 				sx={{
 					width: smallScreens ? '100%' : `calc(100% - ${drawerWidth}px)`,
 					ml: smallScreens ? 0 : `${drawerWidth}px`,
-					backgroundColor: 'background.paper',
+					backgroundColor: 'primary.main',
 					backgroundImage: 'none',
 					boxShadow: 1,
 				}}
@@ -41,11 +41,11 @@ const Topbar = ({ smallScreens, drawerWidth, openDrawer }) => {
 						{/* SEARCH BAR */}
 						<Box
 							display='flex'
-							backgroundColor='background.paper'
+							backgroundColor='dark.dark'
 							boxShadow={1}
 							borderRadius='3px'
 						>
-							<InputBase sx={{ ml: 2, flex: 1 }} placeholder={t('search')} />
+							<InputBase sx={{ ml: 2, flex: 1,color:'grey.50' }} placeholder={t('search')} />
 							<IconButton type='button' sx={{ p: 1 }}>
 								<SearchIcon />
 							</IconButton>

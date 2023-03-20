@@ -42,9 +42,9 @@ const UserDropdown = (props) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 
 	// ** Hooks
-	const userData = JSON.parse(localStorage.getItem(authConfig.userData))
+	const {data :user } = JSON.parse(localStorage.getItem(authConfig.userData))
 	const { logout } = useAuth();
-
+console.log({user})
 	// ** Vars
 	const direction = 'ltr';
 
@@ -90,7 +90,7 @@ const UserDropdown = (props) => {
 					horizontal: 'right',
 				}}
 			>
-				<Avatar>{userData?.name?.charAt(0)}</Avatar>
+				<Avatar>{user.name.charAt(0)}</Avatar>
 			</Badge>
 			<Menu
 				anchorEl={anchorEl}
@@ -116,7 +116,7 @@ const UserDropdown = (props) => {
 								horizontal: 'right',
 							}}
 						>
-							<Avatar>{userData?.name?.charAt(0)}</Avatar>
+							<Avatar>{user.name.charAt(0)}</Avatar>
 						</Badge>
 						<Box
 							sx={{
@@ -126,7 +126,7 @@ const UserDropdown = (props) => {
 								flexDirection: 'column',
 							}}
 						>
-							<Typography sx={{ fontWeight: 600 }}>{userData?.name}</Typography>
+							<Typography sx={{ fontWeight: 600 }}>{user.name}</Typography>
 							<Typography
 								variant='body2'
 								sx={{ fontSize: '0.8rem', color: 'text.disabled' }}

@@ -29,7 +29,7 @@ const CustomModal = ({
 		p: 2,
 		pt: 1,
     borderRadius: 1,
-    maxHeight:"80vh",
+    maxHeight:"90vh",
     overflow:'auto'
 	};
 	return (

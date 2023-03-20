@@ -10,6 +10,7 @@ import Login from 'src/pages/Login';
 import FoundedPeople from 'src/pages/FoundedPeople';
 import MissingPeople from 'src/pages/MissingPeople';
 import Organizations from 'src/pages/Organizations';
+import RegisterPage from 'src/pages/Register';
 import PrivateRoutes from './PrivateRoutes';
 
 const RouterComponent = () => {
@@ -25,6 +26,7 @@ const RouterComponent = () => {
 					</Route>
 				</Route>
 				<Route path='/login' element={<Login />} />
+				<Route path='/register' element={<RegisterPage/>} />
 				<Route path='*' element={<NotFoundPage />} />
 			</Routes>
 		</>
