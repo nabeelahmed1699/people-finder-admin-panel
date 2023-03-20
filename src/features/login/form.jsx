@@ -169,13 +169,13 @@ const LoginForm = () => {
 								)}
 							</FormControl>
 							<Stack direction='row' justifyContent='flex-end' sx={{ mb: 4 }}>
-								<Link to='forgetPassword'>
+								<Link to='/register'>
 									<MuiLink
 										component='span'
 										underline='hover'
 										sx={{ fontSize: '0.83rem' }}
 									>
-										Forgot Password?
+										Register yourself!
 									</MuiLink>
 								</Link>
 							</Stack>

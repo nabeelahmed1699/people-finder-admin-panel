@@ -35,7 +35,11 @@ import { toast } from 'react-hot-toast';
 import MaterialDatePicker from 'src/components/datePicker';
 
 const defaultValues = {
+	name: 'Nabeel Ahmed',
+	DOB: 'sep 16, 1999',
 	password: 'abc',
+	confirmPassword: 'abc',
+	gender: 'male',
 	email: 'nabeel1699@gmail.com',
 };
 
@@ -57,7 +61,7 @@ const RegisterForm = () => {
 	});
 
 	const onSubmit = (data) => {
-		console.log(data)
+		console.log(data);
 	};
 
 	return (
@@ -70,7 +74,7 @@ const RegisterForm = () => {
 					sx={{ width: '100%', height: '100%' }}
 				>
 					<Box width={{ xs: '90%', md: '60%' }} textAlign='center'>
-						<Typography variant='h4'>Register Here!</Typography>
+						<Typography variant='h4'>Create Admin!</Typography>
 						<Stack
 							direction='row'
 							justifyContent='center'
@@ -95,7 +99,7 @@ const RegisterForm = () => {
 									},
 								}}
 							>
-								Create a new user
+								Register a new admin
 							</Typography>
 						</Stack>
 						<form
@@ -151,20 +155,20 @@ const RegisterForm = () => {
 									</FormHelperText>
 								)}
 							</FormControl>
-              <FormControl fullWidth sx={{mb:4}}>
+							<FormControl fullWidth sx={{ mb: 4 }}>
 								<FormLabel id='gender-selector'>Gender</FormLabel>
 								<Controller
 									name='gender'
 									control={control}
 									rules={{ required: true }}
 									render={({ field: { value, onChange, onBlur } }) => (
-                    <RadioGroup
+										<RadioGroup
 											row
 											aria-labelledby='gender-selector'
-                      name='row-radio-buttons-group'
-                      value={value}
-                      onChange={onChange}
-                      onBlur={onBlur}
+											name='row-radio-buttons-group'
+											value={value}
+											onChange={onChange}
+											onBlur={onBlur}
 										>
 											<FormControlLabel
 												value='female'
@@ -292,13 +296,13 @@ const RegisterForm = () => {
 								)}
 							</FormControl>
 							<Stack direction='row' justifyContent='flex-end' sx={{ mb: 4 }}>
-								<Link to='forgetPassword'>
+								<Link to='/login'>
 									<MuiLink
 										component='span'
 										underline='hover'
 										sx={{ fontSize: '0.83rem' }}
 									>
-										Forgot Password?
+										Already a user?
 									</MuiLink>
 								</Link>
 							</Stack>
