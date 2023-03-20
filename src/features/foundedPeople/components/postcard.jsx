@@ -66,7 +66,7 @@ export default function PostCard({
 							/>
 						) : (
 							<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
-								R
+								{person.organizationInfo.name.charAt(0)}
 							</Avatar>
 						)
 					}

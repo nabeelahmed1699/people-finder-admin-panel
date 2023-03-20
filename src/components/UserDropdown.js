@@ -42,7 +42,7 @@ const UserDropdown = (props) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 
 	// ** Hooks
-	const [userData, setUserData] = useState({});
+	const userData = JSON.parse(localStorage.getItem(authConfig.userData))
 	const { logout } = useAuth();
 
 	// ** Vars
@@ -58,11 +58,7 @@ const UserDropdown = (props) => {
 		}
 		setAnchorEl(null);
 	};
-	useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem(authConfig.userData));
-    console.log({localData})
-		setUserData(localData.data);
-	}, []);
+
 
 	const styles = {
 		py: 2,
