@@ -23,6 +23,7 @@ import CustomModal from 'src/components/modal';
 import CreatePostForm from 'src/features/foundedPeople/createPostForm';
 import Filters from 'src/features/foundedPeople/filters';
 import Details from 'src/features/foundedPeople/components/details'
+import PostLoading from 'src/components/loadingPost';
 
 const FoundedPeople = () => {
 	const [foundedPeople, setFoundedPeople] = useState([]);
@@ -129,7 +130,7 @@ const FoundedPeople = () => {
 				</Typography>
 			</Stack>
 			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter}/>
-			{foundedPeople.length > 0 ? (
+			{loading?<PostLoading/>: foundedPeople.length > 0 ? (
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{postsList.map((person) => {
 						return (

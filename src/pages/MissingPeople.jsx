@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // custom imports
 import PostCard from 'src/features/missingPerson/components/postcard';
@@ -24,6 +25,7 @@ import CreatePostForm from 'src/features/missingPerson/createPostForm';
 import Filters from 'src/features/missingPerson/filters';
 import Details from 'src/features/missingPerson/components/details';
 import { authConfig } from 'src/constants/configs/auth';
+import PostLoading from 'src/components/loadingPost';
 
 const MissingPeople = () => {
 	const [missingPeople, setMissingPeople] = useState([]);
@@ -164,7 +166,8 @@ const MissingPeople = () => {
 				</Typography>
 			</Stack>
 			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter} />
-			{missingPeople.length > 0 ? (
+
+			{ loading ? <PostLoading/> :missingPeople.length > 0 ? (
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{postsList.map((person) => {
 						return (
@@ -182,7 +185,7 @@ const MissingPeople = () => {
 				</Grid>
 			) : (
 				<Stack>
-					<Typography variant='h3'>No any post</Typography>
+					<Typography variant='h3'>No post yet</Typography>
 					<Typography variant='h5' color='text.secondary'>
 						Post something to show in the Missing people section.
 					</Typography>
