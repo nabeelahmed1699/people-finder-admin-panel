@@ -35,3 +35,12 @@ export const DELETE_MISSING_PERSON_POST_HANDLER = (_id) => async (dispatch) => {
 		return error;
 	}
 };
+
+export const RECOVERED_MISSING_PERSON_API_HANDLER = (_id) => async (dispatch) => {
+	try {
+    let Data = await Services.RECOVERED_MISSING_PERSON_API(_id);
+		return Data;
+	} catch (error) {
+		return error;
+	}
+};

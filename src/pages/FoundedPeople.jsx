@@ -10,19 +10,19 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-
 // custom imports
 import PostCard from 'src/features/foundedPeople/components/postcard';
 import {
 	DELETE_FOUNDED_POST_API_HANDLER,
 	GET_FOUNDED_API_HANDLER,
 	POST_FOUNDED_API_HANDLER,
+	RECOVERED_FOUNDED_PERSON_API_HANDLER,
 	UPDATE_FOUNDED_API_HANDLER,
 } from 'src/redux/actions/foundedPersonsAction/actions';
 import CustomModal from 'src/components/modal';
 import CreatePostForm from 'src/features/foundedPeople/createPostForm';
 import Filters from 'src/features/foundedPeople/filters';
-import Details from 'src/features/foundedPeople/components/details'
+import Details from 'src/features/foundedPeople/components/details';
 import PostLoading from 'src/components/loadingPost';
 
 const FoundedPeople = () => {
@@ -32,12 +32,14 @@ const FoundedPeople = () => {
 	const [photo, setPhoto] = useState('');
 	const [forDetailPerson, setForDetailPerson] = useState({});
 	const [detailModal, setDetailModal] = useState(false);
-	const [nameFilter, setNameFilter] = useState("")
-	const [isEdit,setIsEdit] = useState(false)
-
+	const [nameFilter, setNameFilter] = useState('');
+	const [isEdit, setIsEdit] = useState(false);
 
 	const openCreateForm = () => setCreatePost(true);
-	const closeCreateForm = () => {setCreatePost(false);setIsEdit(false)}
+	const closeCreateForm = () => {
+		setCreatePost(false);
+		setIsEdit(false);
+	};
 
 	const openDetailModal = () => setDetailModal(true);
 	const closeDetailModal = () => setDetailModal(false);
@@ -50,35 +52,40 @@ const FoundedPeople = () => {
 	}, []);
 
 	async function getFoundedPeopleList() {
-		try {		
+		try {
 			const response = await dispatch(GET_FOUNDED_API_HANDLER());
 			if (response.status >= 200 && response.status <= 299) {
-				const queriedablePeople = response.people.map(person => {
-					const { name, age, fatherName, motherName,street,city,country } = person
-					return {...person,query:`${name}${age}${fatherName}${motherName}${street}${city}${country}`}
-				})
+				const queriedablePeople = response.people.map((person) => {
+					const { name, age, fatherName, motherName, street, city, country } =
+						person;
+					return {
+						...person,
+						query: `${name}${age}${fatherName}${motherName}${street}${city}${country}`,
+					};
+				});
 				setFoundedPeople(queriedablePeople);
 				setLoading(false);
-				
 			}
 		} catch (error) {
-			toast.error('Something went wrong!')
+			toast.error('Something went wrong!');
 		}
 	}
 	useEffect(() => {
-	console.log(foundedPeople)
-},[foundedPeople])
+		console.log(foundedPeople);
+	}, [foundedPeople]);
 	async function handleSubmitPost(data) {
-		console.log({data})
-		setLoading(true)
+		console.log({ data });
+		setLoading(true);
 		if (isEdit) {
-			const response = await dispatch(UPDATE_FOUNDED_API_HANDLER(forDetailPerson._id,{ ...data, photo }))
+			const response = await dispatch(
+				UPDATE_FOUNDED_API_HANDLER(forDetailPerson._id, { ...data, photo })
+			);
 			if (response.status >= 200 && response.status <= 299) {
 				getFoundedPeopleList();
 			}
 			closeCreateForm();
-			setLoading(false)
-			return
+			setLoading(false);
+			return;
 		}
 
 		const response = await dispatch(
@@ -92,9 +99,29 @@ const FoundedPeople = () => {
 	}
 
 	async function handleDelete(_id) {
-		const response = await dispatch(DELETE_FOUNDED_POST_API_HANDLER(_id));
-		getFoundedPeopleList();
-		toast.success('Post deleted successfully!');
+		try {
+			
+			const response = await dispatch(DELETE_FOUNDED_POST_API_HANDLER(_id));
+			if (response.status >= 200 && response.status <= 299) {
+				getFoundedPeopleList();
+				toast.success('Post deleted successfully!');
+			}
+		} catch (error) {
+			toast.error("Something went wrong!")
+		}
+	}
+
+	async function handleRecovered(_id) {
+		try {
+			const response = await dispatch(RECOVERED_FOUNDED_PERSON_API_HANDLER(_id));
+			if (response.status >= 200 && response.status <= 299) {
+				
+				getFoundedPeopleList();
+				toast.success('Successfully updated the list!');
+			}
+		} catch (error) {
+			toast.error("Something went wrong!")
+		}
 	}
 
 	function handleViewMore(person) {
@@ -103,16 +130,16 @@ const FoundedPeople = () => {
 	}
 
 	const postsList = useMemo(() => {
+		if (nameFilter.length === 0) return foundedPeople;
+		return foundedPeople.filter((person) =>
+			person.query.toLowerCase().includes(nameFilter.toLowerCase())
+		);
+	}, [nameFilter, foundedPeople]);
 
-		if (nameFilter.length === 0) return foundedPeople
-		return foundedPeople.filter((person)=>person.query.toLowerCase().includes(nameFilter.toLowerCase()))
-
-	}, [nameFilter, foundedPeople])
-	
 	function handleEdit(person) {
 		setForDetailPerson(person);
-		openCreateForm()
-		setIsEdit(true)
+		openCreateForm();
+		setIsEdit(true);
 	}
 
 	return (
@@ -125,12 +152,13 @@ const FoundedPeople = () => {
 			<Stack alignItems='center'>
 				<Typography variant='h4'>Founded People</Typography>
 				<Typography paragraph>
-					these are the people that are founded by social organizations like
-					Edhi, Chhipa etc...
+					Found: The Missing Pieces of the Puzzle - Inspiring Stories of Successful Searches and Reunions
 				</Typography>
 			</Stack>
-			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter}/>
-			{loading?<PostLoading/>: foundedPeople.length > 0 ? (
+			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter} />
+			{loading ? (
+				<PostLoading />
+			) : foundedPeople.length > 0 ? (
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{postsList.map((person) => {
 						return (
@@ -138,9 +166,10 @@ const FoundedPeople = () => {
 								<PostCard
 									loading={loading}
 									handleDelete={handleDelete}
-									handleEdit = {handleEdit}
+									handleEdit={handleEdit}
 									person={person}
 									handleViewMore={handleViewMore}
+									handleRecovered={handleRecovered}
 								/>
 							</Grid>
 						);
@@ -156,7 +185,10 @@ const FoundedPeople = () => {
 			)}
 			<CustomModal
 				open={createPost}
-				onClose={() => { closeCreateForm(); setIsEdit()}}
+				onClose={() => {
+					closeCreateForm();
+					setIsEdit();
+				}}
 				title='Create a post'
 				subtitle="fill up the information about the person you've founded"
 			>
@@ -183,7 +215,5 @@ const FoundedPeople = () => {
 		</>
 	);
 };
-
-
 
 export default FoundedPeople;

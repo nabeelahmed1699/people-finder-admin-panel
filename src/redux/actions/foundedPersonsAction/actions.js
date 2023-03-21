@@ -32,3 +32,11 @@ export const DELETE_FOUNDED_POST_API_HANDLER = (_id) => async (dispatch) => {
 		return error;
 	}
 };
+export const RECOVERED_FOUNDED_PERSON_API_HANDLER = (_id) => async (dispatch) => {
+	try {
+    let Data = await Services.RECOVERED_FOUNDED_PERSON_API(_id);
+		return Data;
+	} catch (error) {
+		return error;
+	}
+};

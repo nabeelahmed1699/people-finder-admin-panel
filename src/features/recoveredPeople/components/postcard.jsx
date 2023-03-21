@@ -10,22 +10,10 @@ import Avatar from '@mui/material/Avatar';
 import { Table, TableContainer, TableRow, TableCell } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import { red } from '@mui/material/colors';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-
-// icons
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-
-const ITEM_HEIGHT = 30;
 
 export default function PostCard({
 	loading,
@@ -33,18 +21,9 @@ export default function PostCard({
 	person,
 	handleViewMore,
 	handleEdit,
-	handleRecovered
 }) {
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const open = Boolean(anchorEl);
 
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-	console.log({ person });
+
 	if (loading) {
 		return <CircularProgress />;
 	}
@@ -70,11 +49,6 @@ export default function PostCard({
 								{person.organizationInfo.name.charAt(0)}
 							</Avatar>
 						)
-					}
-					action={
-						<IconButton aria-label='settings' onClick={handleClick}>
-							<MoreVertIcon />
-						</IconButton>
 					}
 					title={person.organizationInfo.name}
 					subheader={moment(person.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
@@ -117,39 +91,11 @@ export default function PostCard({
 						{person.description}
 					</Typography>
 					<Stack direction='row' justifyContent='space-between' sx={{ mt: 2 }}>
-						<Button variant='outlined' onClick={()=>handleRecovered(person._id)}>Recovered</Button>
+						<Button variant='outlined'>Recovered</Button>
 						<Button onClick={() => handleViewMore(person)}>View details</Button>
 					</Stack>
 				</CardContent>
 			</Card>
-			<Menu
-				id='long-menu'
-				MenuListProps={{
-					'aria-labelledby': 'long-button',
-				}}
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleClose}
-				PaperProps={{
-					style: {
-						maxHeight: ITEM_HEIGHT * 4.5,
-						width: '20ch',
-					},
-				}}
-			>
-				<MenuItem onClick={() => {handleEdit(person); handleClose()}}>
-					<ListItemIcon>
-						<EditOutlinedIcon fontSize='small' />
-					</ListItemIcon>
-					<ListItemText>Edit</ListItemText>
-				</MenuItem>
-				<MenuItem onClick={() => { handleDelete(person._id); handleClose()}}>
-					<ListItemIcon>
-						<DeleteOutlineIcon fontSize='small' />
-					</ListItemIcon>
-					<ListItemText>Delete</ListItemText>
-				</MenuItem>
-			</Menu>
 		</>
 	);
 }

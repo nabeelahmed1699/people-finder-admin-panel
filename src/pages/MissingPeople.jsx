@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 
 // custom imports
 import PostCard from 'src/features/missingPerson/components/postcard';
@@ -17,6 +16,7 @@ import {
 	DELETE_MISSING_PERSON_POST_HANDLER,
 	GET_MISSING_PEOPLE_API_HANDLER,
 	POST_NEW_MISSING_PERSON_API_HANDLER,
+	RECOVERED_MISSING_PERSON_API_HANDLER,
 	UPDATE_MISSING_PERSON_API_HANDLER,
 } from 'src/redux/actions/missingPeopleAction/actions';
 
@@ -95,6 +95,7 @@ const MissingPeople = () => {
 		const userData = JSON.parse(localStorage.getItem(authConfig.userData));
 		const { _id } = userData.data;
 		body.posterInfo = _id;
+		body.userType = 'registered';
 		if (isEdit) {
 			const response = await dispatch(
 				UPDATE_MISSING_PERSON_API_HANDLER(forDetailPerson._id, {
@@ -121,9 +122,21 @@ const MissingPeople = () => {
 	}
 
 	async function handleDelete(_id) {
-		console.log({ _id });
 		try {
 			const response = await dispatch(DELETE_MISSING_PERSON_POST_HANDLER(_id));
+			if (response.status >= 200 && response.status <= 299) {
+				getMissingPeopleList();
+				toast.success('Post deleted successfully!');
+			}
+		} catch (error) {
+			toast.error('something went wrong try again!');
+		}
+	}
+	async function handleRecovered(_id) {
+		try {
+			const response = await dispatch(
+				RECOVERED_MISSING_PERSON_API_HANDLER(_id)
+			);
 			if (response.status >= 200 && response.status <= 299) {
 				getMissingPeopleList();
 				toast.success('Post deleted successfully!');
@@ -161,13 +174,15 @@ const MissingPeople = () => {
 			<Stack alignItems='center'>
 				<Typography variant='h4'>Missing People</Typography>
 				<Typography paragraph>
-					These are people who are missing from home and separated from their
-					loved ones.
+					Lost and Found: Uniting Communities One Post at a Time - Stories of
+					Hope, Help, and Homecoming
 				</Typography>
 			</Stack>
 			<Filters nameFilter={nameFilter} setNameFilter={setNameFilter} />
 
-			{ loading ? <PostLoading/> :missingPeople.length > 0 ? (
+			{loading ? (
+				<PostLoading />
+			) : missingPeople.length > 0 ? (
 				<Grid container spacing={2} sx={{ mt: 1 }}>
 					{postsList.map((person) => {
 						return (
@@ -178,6 +193,7 @@ const MissingPeople = () => {
 									handleEdit={handleEdit}
 									person={person}
 									handleViewMore={handleViewMore}
+									handleRecovered={handleRecovered}
 								/>
 							</Grid>
 						);
@@ -210,7 +226,11 @@ const MissingPeople = () => {
 			</CustomModal>
 			{!_.isEmpty(forDetailPerson) && (
 				<CustomModal
-					title={forDetailPerson.posterInfo.name}
+					title={
+						forDetailPerson.userType === 'registered'
+							? forDetailPerson.posterInfo.name
+							: forDetailPerson.guestName
+					}
 					subtitle={moment(forDetailPerson.createdAt).format(
 						'MMMM Do YYYY, h:mm:ss a'
 					)}

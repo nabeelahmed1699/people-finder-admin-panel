@@ -33,6 +33,7 @@ export default function PostCard({
 	person,
 	handleViewMore,
 	handleEdit,
+	handleRecovered,
 }) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
@@ -58,14 +59,20 @@ export default function PostCard({
 			>
 				<CardHeader
 					avatar={
-						person.organizationInfo ? (
+						person.posterInfo.photo ? (
 							<Avatar
 								src={person.posterInfo.photo}
-								alt={person.posterInfo.name}
+								alt={
+									person.userType === 'registered'
+										? person.posterInfo.name
+										: person.guestName
+								}
 							/>
 						) : (
 							<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
-								R
+								{person.userType === 'registered'
+									? person.posterInfo.name.charAt(0)
+									: person.guestName.charAt(0)}
 							</Avatar>
 						)
 					}
@@ -74,7 +81,11 @@ export default function PostCard({
 							<MoreVertIcon />
 						</IconButton>
 					}
-					title={person.posterInfo.name}
+					title={
+						person.userType === 'registered'
+							? person.posterInfo.name
+							: person.guestName
+					}
 					subheader={moment(person.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
 				/>
 
@@ -114,7 +125,13 @@ export default function PostCard({
 					<Typography variant='body2' color='text.secondary'>
 						{person.description}
 					</Typography>
-					<Stack direction='row' justifyContent='flex-end' sx={{ mt: 2 }}>
+					<Stack direction='row' justifyContent='space-between' sx={{ mt: 2 }}>
+						<Button
+							variant='outlined'
+							onClick={() => handleRecovered(person._id)}
+						>
+							Recovered
+						</Button>
 						<Button onClick={() => handleViewMore(person)}>View details</Button>
 					</Stack>
 				</CardContent>
@@ -134,13 +151,23 @@ export default function PostCard({
 					},
 				}}
 			>
-				<MenuItem onClick={() => {handleEdit(person); handleClose()}}>
+				<MenuItem
+					onClick={() => {
+						handleEdit(person);
+						handleClose();
+					}}
+				>
 					<ListItemIcon>
 						<EditOutlinedIcon fontSize='small' />
 					</ListItemIcon>
 					<ListItemText>Edit</ListItemText>
 				</MenuItem>
-				<MenuItem onClick={() => { handleDelete(person._id); handleClose()}}>
+				<MenuItem
+					onClick={() => {
+						handleDelete(person._id);
+						handleClose();
+					}}
+				>
 					<ListItemIcon>
 						<DeleteOutlineIcon fontSize='small' />
 					</ListItemIcon>

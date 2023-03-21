@@ -12,6 +12,7 @@ import MissingPeople from 'src/pages/MissingPeople';
 import Organizations from 'src/pages/Organizations';
 import RegisterPage from 'src/pages/Register';
 import PrivateRoutes from './PrivateRoutes';
+import RecoveredPeople from 'src/pages/RecoveredPeople';
 
 const RouterComponent = () => {
 	return (
@@ -21,6 +22,7 @@ const RouterComponent = () => {
 					<Route element={<PrivateRoutes/>}>
 					<Route path='/' element={<Dashboard />} />
 					<Route path='/founded-people' element={<FoundedPeople />} />
+					<Route path='/recovered' element={<RecoveredPeople />} />
 					<Route path='/missing-people' element={<MissingPeople />} />
 					<Route path='/organizations' element={<Organizations />} />
 					</Route>

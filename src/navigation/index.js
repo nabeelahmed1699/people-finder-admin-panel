@@ -2,6 +2,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import HailIcon from '@mui/icons-material/Hail';
 import PeopleIcon from '@mui/icons-material/People';
+import AddModeratorOutlinedIcon from '@mui/icons-material/AddModeratorOutlined';
 
 const nonActive = 'neutral.50';
 const activeColor = 'dark.main';
@@ -29,5 +30,10 @@ export const navlinks = [
 		label: 'founded people',
 		icon:(isActive)=> <HailIcon sx={{ color: isActive ? activeColor : nonActive }}  />,
 		route: '/founded-people',
+	},
+	{
+		label: 'recovered people',
+		icon:(isActive)=> <AddModeratorOutlinedIcon sx={{ color: isActive ? activeColor : nonActive }}  />,
+		route: '/recovered',
 	},
 ];
