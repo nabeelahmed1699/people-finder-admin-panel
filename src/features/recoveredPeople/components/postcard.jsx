@@ -90,8 +90,7 @@ export default function PostCard({
 					<Typography variant='body2' color='text.secondary'>
 						{person.description}
 					</Typography>
-					<Stack direction='row' justifyContent='space-between' sx={{ mt: 2 }}>
-						<Button variant='outlined'>Recovered</Button>
+					<Stack direction='row' justifyContent='flex-end' sx={{ mt: 2 }}>
 						<Button onClick={() => handleViewMore(person)}>View details</Button>
 					</Stack>
 				</CardContent>

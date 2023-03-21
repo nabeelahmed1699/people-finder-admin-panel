@@ -59,22 +59,11 @@ export default function PostCard({
 			>
 				<CardHeader
 					avatar={
-						person.posterInfo.photo ? (
-							<Avatar
-								src={person.posterInfo.photo}
-								alt={
-									person.userType === 'registered'
-										? person.posterInfo.name
-										: person.guestName
-								}
-							/>
-						) : (
-							<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
-								{person.userType === 'registered'
-									? person.posterInfo.name.charAt(0)
-									: person.guestName.charAt(0)}
-							</Avatar>
-						)
+						<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
+							{person.userType === 'registered'
+								? person.posterInfo.name.charAt(0)
+								: person.guestName.charAt(0)}
+						</Avatar>
 					}
 					action={
 						<IconButton aria-label='settings' onClick={handleClick}>
